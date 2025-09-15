@@ -90,13 +90,13 @@ const scenes = [
       {
         speaker: '열덕 매니저',
         name: '열덕 매니저',
-        expression: 'assets/images/manager_happy.png',
+        expression: 'assets/images/manager_yeoldock.png',
         text: '어어, 원더 매니저. 잘오셨습니다. 오늘은 언덕 매니저님과 현장에 나가서 교육을 받으면 됩니다. 음.. 조금 까칠하시긴 한데.. 그래도 괜찮을거에요 ㅎㅎ'
       },
       {
         speaker: '언덕 매니저',
         name: '언덕 매니저',
-        expression: 'assets/images/manager_stern.png',
+        expression: 'assets/images/manager_undock.png',
         text: '왔냐? …그래, 시간은 맞춰 왔네. 여기가 원더랜드다. 오늘 하루 네 교육은 내가 맡았어. 실수하면? 그냥 퇴근하지 말고 나가라. 시간 아까우니까 바로 현장으로 간다.'
       }
     ],
@@ -111,7 +111,7 @@ const scenes = [
       {
         speaker: '언덕 매니저',
         name: '언덕 매니저',
-        expression: 'assets/images/manager_stern.png',
+        expression: 'assets/images/manager_undock.png',
         text: '왔냐? …그래, 시간은 맞춰 왔네. 여기가 원더랜드다. 오늘 하루 네 교육은 내가 맡았어. 실수하면? 그냥 퇴근하지 말고 나가라. 시간 아까우니까 바로 현장으로 간다.'
       }
     ],
@@ -138,8 +138,8 @@ const scenes = [
     background: 'assets/images/living_room.png',
     script: [
       // 주인이 기지개를 피는 모습 (stretching); this file actually shows the owner stretching
-      { speaker: '주인', name: '주인', expression: 'assets/images/manager_stern.png', text: '하암~ 원더, 왔어? 오늘도 출근 준비 잘부탁해~' },
-      { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_happy.png', text: '아침이 엉망이면 하루 종일 기분 잡치는 거 알지?\n주인이 뭘 먼저 하는지 잘보고 빠릿빠릿 움직이라고.' }
+      { speaker: '주인', name: '주인', expression: 'assets/images/owner_happy.png', text: '하암~ 원더, 왔어? 오늘도 출근 준비 잘부탁해~' },
+      { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_undock.png', text: '아침이 엉망이면 하루 종일 기분 잡치는 거 알지?\n주인이 뭘 먼저 하는지 잘보고 빠릿빠릿 움직이라고.' }
     ],
     nextScene: 6
   },
@@ -247,7 +247,6 @@ const scenes = [
     script: [
       { speaker: 'Narrator', text: '당신은 원더랜드의 신입 직원으로서 기본 자격을 갖추었습니다.\n하지만 언덕의 인정은 절반뿐입니다.' },
       { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_happy.png', text: '오늘은 테스트니까 봐줬다. 진짜 상황이면 벌써 잘렸을 거다. 다음엔 나한테 덜 욕 먹게 해라. 가라. ..내일보자.' },
-      { speaker: 'Narrator', text: '언덕의 뺨이 붉그스레 해져있다.' }
     ],
     // no nextScene, end of game
   }

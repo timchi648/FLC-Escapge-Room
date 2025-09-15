@@ -540,11 +540,60 @@ dialogueBox.addEventListener('pointerdown', (e) => {
   advanceDialogue();
 }, { passive: false });
 
-// (선택) 화면 아무 곳 탭해도 진행되게 하고 싶다면:
+let lastHintAt = 0;
+
+function shouldShowHintTap(e) {
+    // 모달 열려있으면 힌트 X
+    if (isModalOpen()) return false;
+    // 대화창이 보이면(=스토리 중) 힌트 대신 진행
+    if (!dialogueBox.classList.contains('hidden')) return false;
+    // 거실 인터랙션 레이어가 있을 때만 (씬 3)
+    if (!state.livingRoomLayer) return false;
+    return true;
+}
+
+// 현재 미션 상황에 맞는 힌트 문구 선택
+function getContextHint() {
+    // 우선순위: 남쪽(주작) → 서쪽(백호) → 북쪽(현무) → 동쪽(청룡) → 센터
+    if (!state.missions.south) {
+        return '액자의 문구를 살펴보자. 방을 노을빛으로 만드려면 어떻게 해야할까?';
+    }
+    if (!state.missions.north) {
+        return '모든 전원을 끄고 3초간 유지해 보자. 콘센트는 월패드에서 제어할 수 있어.';
+    }
+    if (!state.missions.west) {
+        return '액자의 문구를 살펴보자. 출차시간을 확인해서 호랑이 자동차의 잠금을 풀어야할까?';
+    }
+    if (!state.missions.east) {
+        return '환기를 켜서 공기를 맑게 만들어 보자. 월패드의 환기에서 켤 수 있어.';
+    }
+    if (state.missions.north && state.missions.south && state.missions.west && state.missions.east && !state.missions.center) {
+        return '사방신의 힘이 모였어. 다음 단계로 진행해 볼까?';
+    }
+    // 전부 완료면 가벼운 안내
+    return '월패드, 액자, 호랑이 자동차 중 하나를 눌러 볼까?';
+}
+
+// (선택) 화면 아무 곳 탭해도 진행/힌트
 app.addEventListener('pointerdown', (e) => {
-  if (e.target.closest('.modal-content, #choice-container, .vslider, .hotspot, button, a')) return;
-  advanceDialogue();
+    // 인터랙티브 요소 위 탭이면 원래 동작 유지
+    if (e.target.closest('.modal-content, #choice-container, .vslider, .hotspot, button, a')) return;
+
+    // 거실에서 대화창이 없고(=스토리 아님), 모달도 없고, 핫스팟이 아닌 영역 → 힌트
+    if (shouldShowHintTap(e)) {
+        const now = Date.now();
+        if (now - lastHintAt > 2000) { // 1초 쿨다운
+            const msg = getContextHint();
+            if (msg) showToast(msg);
+            lastHintAt = now;
+        }
+        return; // 힌트만 띄우고 스토리 진행은 막음
+    }
+
+    // 그 외(예: 스토리 장면) → 기존 진행 로직
+    advanceDialogue();
 }, { passive: true });
+
 
 // ===== 씬 정의 =====
 const scenes = [

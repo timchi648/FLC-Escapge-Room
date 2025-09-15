@@ -79,7 +79,7 @@ const scenes = [
       { speaker: 'Narrator', text: '당신은 고된 취준 끝에, ‘윈더랜드’에 입사하게 된 신입 사원입니다.\n즐거운 첫 출근을 해보세요!' }
     ],
     choices: [
-      { text: '출근하기', nextScene: 2, onSelect: () => { bgm.play().catch(() => {}); } }
+      { text: '출근하기', nextScene: 2, onSelect: () => {  } }
     ]
   },
   {

@@ -186,7 +186,7 @@ const scenes = [
     id: 8,
     background: 'assets/images/living_room.png',
     script: [
-      { speaker: '주인', name: '주인', expression: 'assets/images/owner_thinking.png', text: '아.. 내가 금요일에 차를 A구역에 뒀던가? 씁.. 자리가 없길래 평소랑 다른데 뒀던 것 같은데..\n\n\n힌트 : 주인의 차는 파란색, 차 번호는 12가 1234' }
+      { speaker: '주인', name: '주인', expression: 'assets/images/owner_thinking.png', text: '아.. 내가 금요일에 차를 A구역에 뒀던가? 씁.. 자리가 없길래 평소랑 다른데 뒀던 것 같은데..\n\n\n힌트 : 주인의 차는 파란색, 차 번호는 12가 1234\n (버튼이 보이지 않는다면 스크롤 해보세요!)' }
     ],
     process: runStep8
   },
@@ -218,7 +218,7 @@ const scenes = [
     id: 12,
     background: 'assets/images/shoe_room.png',
     script: [
-      { speaker: '주인', name: '주인', expression: 'assets/images/owner_goodbye.png', text: '오늘도 집 잘부탁해 원더~' }
+      { speaker: '주인', name: '주인', expression: 'assets/images/owner_goodbye.png', text: '오늘도 집 잘부탁해 원더~\n(버튼이 모두 보이지 않는다면 스크롤 해보세요!)' }
     ],
     process: runStep12
   },
@@ -234,7 +234,7 @@ const scenes = [
     script: [
       { speaker: 'Narrator', text: '곧 경비원과 경찰, 주인에 의해 도둑이 붙잡혔다.' }
     ],
-    nextScene: 15
+    process: () => showSystemTip('security', () => showScene(15))
   },
   {
     id: 15,
@@ -511,7 +511,9 @@ function runStep6() {
         }
         const reactionLine = { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_undock.png', text: reactionText };
         // create temporary scene lines then proceed to next scene 7
-        const tempScene = { script: [ thankLine, reactionLine ], nextScene: 7 };
+        const tempScene = { script: [ thankLine, reactionLine ],
+          process: () => showSystemTip('open_curtain', () => showScene(7))
+        };
         // replace current scene temporarily
         state.currentScene = tempScene;
         state.lineIndex = 0;
@@ -547,7 +549,7 @@ function runStep7() {
         // show praise
         const praise = { speaker: '주인', name: '주인', expression: 'assets/images/owner_happy.png', text: '역시 원더야~~ 말안해도 척척이네 ㅎㅎ 고마워 ㅎㅎ' };
         const praise_undock = {speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_undock_smile.png', text: '흠.. 주인이 아침 먹을 때 커피를 마시는 걸 알아채다니, 생각보다 제법이군.'}
-        const tempScene = { script: [ praise, praise_undock ], nextScene: 8 };
+        const tempScene = { script: [ praise, praise_undock ], process: () => showSystemTip('coffee', () => showScene(8)) };
         state.currentScene = tempScene;
         state.lineIndex = 0;
         showNextLine();
@@ -661,7 +663,9 @@ function showCCTVGame() {
         // show success lines
         const wonderLine = { speaker: '원더', name: '원더', text: 'A구역 12 기둥 옆에 위치해있습니다.' };
         const ownerLine = { speaker: '주인', name: '주인', expression: 'assets/images/owner_happy.png', text: '헐? 고마워~' };
-        const tempScene = { script: [ wonderLine, ownerLine ], nextScene: 9 };
+        const tempScene = { script: [ wonderLine, ownerLine ], 
+          process: () => showSystemTip('cctv', () => showScene(9))
+        };
         state.currentScene = tempScene;
         state.lineIndex = 0;
         showNextLine();
@@ -710,7 +714,7 @@ function showBriefing(type, nextSceneId) {
     lines.push({ speaker: '원더', name: '원더', text: '오늘의 주요 뉴스는 …' });
     lines.push({ speaker: '주인', name: '주인', expression: 'assets/images/owner_breath.png', text: '뭐라고?? …후.. 출근하면서 주식 좀 봐야겠다..' });
   }
-  const tempScene = { script: lines, nextScene: nextSceneId };
+  const tempScene = { script: lines, process: () => showSystemTip('news', () => showScene(nextSceneId)) };
   state.currentScene = tempScene;
   state.lineIndex = 0;
   showNextLine();
@@ -768,7 +772,9 @@ function runStep11() {
         choiceContainer.innerHTML = '';
         const wonderLine = { speaker: '원더', name: '원더', text: '엘리베이터가 현재 7층에 도착했습니다.' };
         const ownerLine = { speaker: '주인', name: '주인', expression: 'assets/images/owner_happy.png', text: '땡큐~' };
-        const tempScene = { script: [ wonderLine, ownerLine ], nextScene: 12 };
+        const tempScene = { script: [ wonderLine, ownerLine ], 
+          process: () => showSystemTip('elevator', () => showScene(12))
+        };
         state.currentScene = tempScene;
         state.lineIndex = 0;
         showNextLine();
@@ -818,8 +824,7 @@ function runStep12() {
     if (selected.size === items.length) {
       // success
       choiceContainer.innerHTML = '';
-      const tempScene = { script: [], nextScene: 13 };
-      state.currentScene = tempScene;
+      showSystemTip('outing', () => showScene(13));
       state.lineIndex = 0;
       showScene(13);
       } else {
@@ -847,7 +852,9 @@ function runStep15() {
         // correct
         choiceContainer.innerHTML = '';
         const reaction = { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_undock.png', text: '그래, 눈 안아프겠네. 어휴, 오늘 처음으로 사람 같은 판단했네.' };
-        const tempScene = { script: [ reaction ], nextScene: 16 };
+        const tempScene = { script: [ reaction ], 
+          process: () => showSystemTip('light_mode', () => showScene(16))
+        };
         state.currentScene = tempScene;
         state.lineIndex = 0;
         showNextLine();
@@ -870,7 +877,7 @@ function runStep16() {
   btn.addEventListener('click', (event) => {
     event.stopPropagation();
     // proceed to next scene 17
-    showScene(17);
+    showSystemTip('air', () => showScene(17));
   });
   choiceContainer.appendChild(btn);
 }
@@ -906,7 +913,7 @@ function runStep17() {
     event.stopPropagation();
     if (selected.size === items.length) {
       // success -> end
-      showScene(18);
+      showSystemTip('sleep', () => showScene(18));
     } else {
       showToast('언덕 매니저: 둘 다 선택해야 하지 않겠냐?');
     }
@@ -923,7 +930,7 @@ function runStep13() {
     // Start red alert effect
     startAlertEffect();
     const lines = [
-      { speaker: '원더', name: '원더', text: '어, 이럴땐 어떡하죠, 언덕 매니저님?!!!' },
+      { speaker: '원더', name: '원더', text: '어, 이럴땐 어떡하죠, 언덕 매니저님?!!! 침입자에요!!' },
       { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_undock.png', text: '쯧쯧.. 침착하게 기다려라. 아까 방범모드를 켜놨으니, 경비실과 주인에게 이미 연락이 갔을 거야. 곧 경비원이 확인해보러 올거다. 우리는 이 상황을 잘 기억해놨다가 알려주기만 하면 돼.' }
     ];
     const tempScene = { script: lines, nextScene: 14 };
@@ -972,3 +979,57 @@ function runStep13() {
 document.addEventListener('DOMContentLoaded', () => {
   startGame();
 });
+
+// ===== System Tip (도사 버전과 동일 컨셉) =====
+function ensureSystemTipOverlay() {
+  let el = document.getElementById('system-tip-overlay');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'system-tip-overlay';
+    document.getElementById('game').appendChild(el); // #game 위에 올림
+  }
+  return el;
+}
+
+// 네가 준 맵 그대로 사용
+const SYSTEM_TIP_MAP = {
+  open_curtain: { title: '☀️ 모닝루틴',  msg: '원더는 주인의 모닝 루틴을 파악하고 자동화해야합니다.' },
+  coffee:       { title: '☀️ 모닝루틴',  msg: '스마트한 베스틴 원더 AI라면, 평소 주인의 행동을 기억해두어야겠죠?' },
+  cctv:         { title: '🚗 주차장 CCTV', msg: '베스틴의 원더 AI는 당신의 차량도 기억하고 있습니다!' },
+  news:         { title: '☀️ 모닝루틴',  msg: '주인이 주기적으로 확인하는 정보는 원더가 알려줍니다!' },
+  elevator:     { title: '☀️ 모닝루틴',  msg: '월패드의 기능인 엘리베이터 호출하기, 버스 도착 예정 시간 알려주기 모두<br>주인의 행동을 감지한 원더가 이젠 자동으로 실행합니다.' },
+  outing:       { title: '🚪 외출 연동 설정', msg: '월패드의 외출 연동 설정 기능도 이젠<br>주인의 행동을 감지한 원더가 자동으로 실행합니다.' },
+  security:     { title: '🔒 방범',      msg: '아까 원더가 실행한 방범 기능을 통해 빠른 조치가 가능했네요!' },
+  light_mode:   { title: '💡 조명 모드',  msg: '원더가 있다면 일일이 조명 모드를 실행하지 않아도 돼요. 모두 자동입니다!' },
+  air:          { title: '🍃 환기',      msg: '월패드와 원더가 만나 더욱 스마트해졌네요!<br>이젠 일일이 확인을 누르지 않아도 됩니다.' },
+  sleep:        { title: '😴 취침모드',   msg: '이젠 취침모드도 자는 모습을 감지한 원더가 자동으로..zzz 모두 안녕히 주무세요!' },
+};
+
+function showSystemTip(which, onClose) {
+  if (!state.tipsShown) state.tipsShown = {};
+  if (state.tipsShown[which]) { onClose && onClose(); return; }
+  state.tipsShown[which] = true;
+
+  const info = SYSTEM_TIP_MAP[which] || { title: '안내', msg: '스마트홈 기능을 확인해보세요.' };
+  const overlay = ensureSystemTipOverlay();
+  overlay.innerHTML = `
+    <div class="system-tip modal-content" role="dialog" aria-modal="true" aria-label="${info.title}">
+      <h3>${info.title}</h3>
+      <p>${info.msg}</p>
+      <div class="tip-actions">
+        <button class="btn-tip" id="tip-ok">확인</button>
+      </div>
+    </div>`;
+  overlay.classList.add('is-visible');
+
+  const finish = () => {
+    overlay.classList.remove('is-visible');
+    overlay.innerHTML = '';
+    onClose && onClose();
+  };
+  overlay.addEventListener('click', (e) => {
+    if (!e.target.closest('.modal-content')) finish();
+  }, { once: true });
+  overlay.querySelector('#tip-ok')?.addEventListener('click', finish, { once: true });
+}
+

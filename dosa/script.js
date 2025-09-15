@@ -21,6 +21,13 @@ const state = {
     east: false,  // blue (청룡)
     center: false // yellow (황중앙)
   },
+    tipsShown: {
+      south:false,
+      north:false,
+      west:false,
+      east:false,
+      center:false
+    },
   lastParkingCode: '1345',
   livingRoomLayer: null,
   // 현재 선택된 색온도(앰비언트 유지용). 초기값은 5700K(하얀빛).
@@ -332,8 +339,8 @@ function updateGauge() {
   document.head.appendChild(s);
 })();
 
-function showCreature(creature) {
-  // 현재 화면에서 최상위 z-index를 찾아 +20 올려서 확실히 최상단으로
+function showCreature(creature, onDone) {
+  // 최상위 z-index 계산
   const topZ = Math.max(
     parseInt(getComputedStyle(modalContainer).zIndex) || 0,
     parseInt(getComputedStyle(dialogueBox).zIndex) || 0,
@@ -349,8 +356,8 @@ function showCreature(creature) {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: String(topZ),          // ← 모달보다 항상 위
-    pointerEvents: 'none',         // ← 밑의 클릭 막지 않음
+    zIndex: String(topZ),
+    pointerEvents: 'none',
     background: 'rgba(0,0,0,0.45)',
     opacity: '0',
     transition: 'opacity .2s ease'
@@ -364,23 +371,85 @@ function showCreature(creature) {
     height: 'auto',
     objectFit: 'contain',
     willChange: 'transform, opacity',
-    animation: 'none',
-    WebkitAnimation: 'none'
+    animation: 'fadeCreature 1.2s ease forwards'
   });
 
   overlay.appendChild(img);
   app.appendChild(overlay);
 
   const start = () => {
-    // 오버레이 페이드인 후 본체 애니메이션
     requestAnimationFrame(() => { overlay.style.opacity = '1'; });
-    img.style.animation = 'fadeCreature 1.2s ease forwards';
-    img.style.WebkitAnimation = 'fadeCreature 1.2s ease forwards';
-    setTimeout(() => overlay.remove(), 1300);
+    setTimeout(() => {
+      overlay.remove();
+      if (typeof onDone === 'function') onDone();
+    }, 1300); // 애니 끝난 뒤 콜백
   };
 
   if (img.complete) start();
   else img.addEventListener('load', start, { once: true });
+}
+
+// ===== 시스템 팁 모달(흰 배경 + 주황 테두리) =====
+(function ensureSystemTipStyles(){
+  if (document.getElementById('system-tip-style')) return;
+  const s = document.createElement('style');
+  s.id = 'system-tip-style';
+  s.textContent = `
+    .modal-content.system-tip {
+      background:#fff !important;
+      color:#111 !important;
+      border:2px solid #FFA63B;
+      border-radius:16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.35), 0 0 0 1px rgba(255,166,59,.2) inset;
+    }
+    .system-tip h3 { margin:0 0 .4rem 0; font-size:1.05rem; color:#111; }
+    .system-tip p  { margin:.3rem 0; font-size:.9rem; color:#222; }
+    .btn-tip {
+      background:#FFA63B; color:#111; border:none; border-radius:12px;
+      padding:.6rem 1rem; font-size:.85rem; cursor:pointer;
+      box-shadow:0 8px 16px rgba(0,0,0,.25);
+      transition: transform .1s ease, box-shadow .1s ease;
+    }
+    .btn-tip:active { transform: translateY(1px); box-shadow:0 6px 12px rgba(0,0,0,.25); }
+  `;
+  document.head.appendChild(s);
+})();
+
+function showSystemTip(which, onClose) {
+  // 이미 보여준 팁이면 즉시 다음 흐름 진행
+  if (state.tipsShown?.[which]) { if (onClose) onClose(); return; }
+  if (!state.tipsShown) state.tipsShown = {};
+  state.tipsShown[which] = true;
+
+  const map = {
+    south: { title: '🔥 조명',    msg: '베스틴 스마트홈에서는 월패드를 통해 색온도를 제어할 수 있습니다!<br>베스틴 스마트홈에서 자신만의 색온도 모드를 정의해보세요.' },
+    north: { title: '🐢 전력',    msg: '베스틴 스마트홈의 스마트 콘센트에서 전력 사용량을 관리하고, 대기전력을 차단할 수 있습니다.<br>베스틴 스마트홈으로 더욱 스마트하게 효율적으로 에너지를 사용하세요!' },
+    west:  { title: '🐯 보안',    msg: '베스틴 스마트홈에서는 출차기록을 남기고 관리할 수 있습니다. 뛰어난 보안과 편의는 덤이죠!' },
+    east:  { title: '🐉 환기',    msg: '베스틴 스마트홈에서는 월패드에서 환기를 켤 수 있습니다.<br>필터 교체 시기, 공기질 모두 자동으로 관리해요!' },
+    center:  { title: '🔒 보안',    msg: '베스틴 도어락과 보안 시스템으로 더욱 안전한 우리집을 만들 수 있습니다.' },
+  };
+  const info = map[which] || { title:'안내', msg:'스마트홈 기능을 확인해보세요.' };
+
+  modalContainer.innerHTML = `
+    <div class="modal-content system-tip" style="max-width: 820px;">
+      <h3>${info.title}</h3>
+      <p>${info.msg}</p>
+      <div style="text-align:center; margin-top:.8rem;">
+        <button class="btn-tip" id="tip-ok">확인</button>
+      </div>
+    </div>`;
+  modalContainer.classList.remove('hidden');
+
+  const finish = () => {
+    modalContainer.classList.add('hidden');
+    modalContainer.innerHTML = '';
+    if (onClose) onClose();
+  };
+
+  modalContainer.onclick = (e) => {
+    if (!e.target.closest('.modal-content')) finish();
+  };
+  document.getElementById('tip-ok')?.addEventListener('click', finish);
 }
 
 
@@ -566,7 +635,7 @@ function getContextHint() {
         return '모든 전원을 끄고 3초간 유지해 보자. 콘센트는 월패드에서 제어할 수 있어.';
     }
     if (!state.missions.west) {
-        return '출차시간을 확인해서 호랑이 자동차의 잠금을 풀어야할까?';
+        return '출차시간을 확인해서 호랑이 자동차의 잠금을 풀자.';
     }
     if (!state.missions.east) {
         return '환기를 켜서 공기를 맑게 만들어 보자. 월패드의 환기에서 켤 수 있어.';
@@ -1016,7 +1085,7 @@ function openLighting() {
           if (kelvinToLabel(currentK) === '노을빛' && !state.missions.south) {
             state.missions.south = true;
             updateGauge();
-            showCreature('phoenix');
+            showCreature('phoenix', () => showSystemTip('south'));
             showToast('주작의 힘이 깨어났습니다!');
             // 노을빛 유지: 현재 색온도를 상태에 저장하고 모달만 닫음
             state.ambientKelvin = currentK;
@@ -1164,7 +1233,7 @@ function openOutlet() {
       if (!state.elec && offFlowActive && !state.missions.north) {
         state.missions.north = true;
         updateGauge();
-        showCreature('black_tortoise');
+        showCreature('black_tortoise', () => showSystemTip('north'));
         showToast('현무의 힘이 깨어났습니다!');
         setTimeout(() => {
           modalContainer.classList.add('hidden');
@@ -1301,7 +1370,7 @@ function openVentilation() {
 
       const delay = 1000; // 1초 쉬고
       setTimeout(() => {
-        showCreature('blue_dragon'); // 그 다음 등장
+        showCreature('blue_dragon', () => showSystemTip('east')); // 그 다음 등장
 
         // 등장 애니메이션 시간(약 1.2초)에 맞춰 모달 닫기
         setTimeout(() => {
@@ -1373,7 +1442,7 @@ function openCarLock() {
       if (!state.missions.west) {
         state.missions.west = true;
         updateGauge();
-        showCreature('white_tiger');
+        showCreature('white_tiger', () => showSystemTip('west'));
         showToast('백호의 힘이 깨어났습니다!');
       }
       modalContainer.classList.add('hidden');
@@ -1556,16 +1625,16 @@ function runInfiltration() {
         state.missions.center = true;
         updateGauge();
 
-        // 침입자 모달 닫기
+        // 침입자 모달 닫고 → 센터 팝업 → (닫기 후) 성공 모달
         modalContainer.classList.add('hidden');
-
-        // 모든 미션이 true라면 탈출성공 모달 → 닫으면 엔딩(6)로
-        if (areAllMissionsTrue()) {
-          showEscapeSuccessModal(() => showScene(6));
-        } else {
-          // 방어적 처리(이론상 도달 X)
-          showScene(6);
-        }
+        const goNext = () => {
+          if (areAllMissionsTrue()) {
+            showEscapeSuccessModal(() => showScene(6));
+          } else {
+            showScene(6);
+          }
+        };
+        showSystemTip('center', goNext);
       } else {
         showToast('틀렸습니다. 다시 생각해보세요.');
       }

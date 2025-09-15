@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LABS QUEST – HDC 랩스</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <!-- Hero section -->
+  <section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-subtitle">HDC 랩스</p>
+      <h1 class="hero-title">LABS QUEST</h1>
+      <button id="scroll-down" class="scroll-down-btn" aria-label="Scroll down">
+        <span class="arrow-down">&#x25BC;</span>
+      </button>
+    </div>
+  </section>
+  <!-- Game section -->
+  <section id="games-section" class="games-section">
+    <div class="game-container">
+      <!-- Game cards -->
+        <div class="game-card" data-name="도사의 마지막 주문서 찾기" data-description="베스틴 스마트홈을 지키기 위한 주문을 찾아주세요.">
+          <a href="dosa/index.html" class="game-card-link">
+            <img src="assets/images/last_spell.png" alt="도사의 마지막 주문서 찾기 포스터" />
+            <div class="overlay">
+              <h3 class="game-name">도사의 마지막 주문서 찾기</h3>
+              <p class="game-desc">베스틴 스마트홈을 지키기 위한 주문을 찾아주세요.</p>
+            </div>
+          </a>
+        </div>  
+        <div class="game-card" data-name="원더랜드" data-description="고된 취준 끝, ‘윈더랜드’에 입사한 당신. 신입사원의 첫걸음을 시작하세요!">
+          <a href="wonderland/index.html" class="game-card-link">
+            <img src="assets/images/wonderland.png" alt="원더랜드 포스터" />
+            <div class="overlay">
+              <h3 class="game-name">원더랜드</h3>
+              <p class="game-desc">고된 취준 끝, ‘윈더랜드’에 입사한 당신. 신입사원의 첫걸음을 시작하세요!</p>
+            </div>
+          </a>
+        </div>
+        <div class="game-card" data-name="찾았다! 내 집" data-description="종현과 함께 완벽한 집을 찾아보세요!">
+          <a href="develop.html" class="game-card-link">
+            <img src="assets/images/find_home.png" alt="찾았다! 내 집 포스터" />
+            <div class="overlay">
+              <h3 class="game-name">찾았다! 내 집</h3>
+              <p class="game-desc">종현의 완벽한 집을 찾아주세요!</p>
+            </div>
+          </a>
+        </div>
+        <div class="game-card" data-name="스마트 빌딩 매니저" data-description="빌딩의 여러 문제를 스마트하게 해결하세요.">
+          <a href="develop.html" class="game-card-link">
+            <img src="assets/images/smart_building.png" alt="스마트 빌딩 매니저 포스터" />
+            <div class="overlay">
+              <h3 class="game-name">스마트 빌딩 매니저</h3>
+              <p class="game-desc">빌딩의 여러 문제를 스마트하게 해결하세요.</p>
+            </div>
+          </a>
+        </div>
+    </div>
+    <!-- Navigation arrows for mobile -->
+    <button class="nav-arrow left" aria-label="Previous">
+      <span>&#x25C0;</span>
+    </button>
+    <button class="nav-arrow right" aria-label="Next">
+      <span>&#x25B6;</span>
+    </button>
+  </section>
+  <script src="./script.js"></script>
+</body>
+</html>

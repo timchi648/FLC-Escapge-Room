@@ -1,0 +1,311 @@
+/*
+ * Styles for the Labs Quest game selection page.
+ * Responsive design ensures a pleasant experience on both mobile and desktop.
+ * Animations and transitions lend the page a playful, polished feel.
+ */
+
+:root {
+  --bg-light: #f7e8d8;
+  --bg-dark: #efdbc3;
+  --text-dark: #3a2f28;
+  --accent: #dca869;
+  --shadow: rgba(0, 0, 0, 0.15);
+  --hero-text: #fef7e6;
+  --hero-accent: #ffd47e;
+  --hero-bg: url("assets/images/hero-bg.png");
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Pretendard', 'Helvetica Neue', Arial, sans-serif;
+  background: linear-gradient(to bottom, var(--bg-light), var(--bg-dark));
+  color: var(--text-dark);
+  overflow-x: hidden;
+}
+
+/* Hero section */
+.hero {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  background: var(--hero-bg) center/cover no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.8));
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  animation: fadeDown 1.5s ease-out forwards;
+  padding: 2rem 3rem;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+}
+
+.hero-subtitle {
+  margin: 0;
+  font-size: 1.4rem;
+  letter-spacing: 0.2em;
+  color: var(--hero-accent);
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.hero-title {
+  margin: 0.5rem 0 1.5rem;
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--hero-text);
+  letter-spacing: 0.1em;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Scroll down button */
+.scroll-down-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid var(--hero-accent);
+  color: var(--hero-accent);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  transition: background 0.3s ease, transform 0.3s ease;
+  animation: bounce 2s infinite;
+}
+.scroll-down-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(3px);
+}
+
+/* Bounce animation for the scroll-down arrow */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Navigation arrows for mobile slider */
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: none; /* hidden by default; shown on mobile via media */
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  z-index: 10;
+}
+
+.nav-arrow:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.nav-arrow.left {
+  left: 10px;
+}
+.nav-arrow.right {
+  right: 10px;
+}
+
+/* Show arrows on mobile devices */
+@media (max-width: 768px) {
+  .nav-arrow {
+    display: flex;
+  }
+}
+
+/* Games section container */
+.games-section {
+  position: relative;
+  background: linear-gradient(to bottom, var(--bg-dark), var(--bg-light));
+  padding-top: 3rem;
+}
+
+/* Header styling */
+.site-header {
+  text-align: center;
+  padding: 1.5rem 0 1rem;
+  animation: fadeDown 1s ease-out both;
+}
+
+.company {
+  margin: 0;
+  font-size: 1.2rem;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0.3rem 0 0;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  letter-spacing: 0.05em;
+  position: relative;
+}
+
+/* Container holding game cards */
+.game-container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 1rem 0 2rem;
+  scroll-behavior: smooth;
+}
+
+/* Hide default scrollbar in WebKit */
+.game-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Each game card */
+.game-card {
+  position: relative;
+  flex: 0 0 70%;
+  margin: 0 15%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px var(--shadow);
+  background: #fff;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  scroll-snap-align: center;
+  animation: fadeInUp 0.8s ease-out both;
+}
+
+.game-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Overlay containing the name and description */
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.0));
+  color: #fff;
+  box-sizing: border-box;
+  transition: transform 0.4s ease;
+  transform: translateY(0);
+}
+
+.game-name {
+  font-size: 1.6rem;
+  margin: 0 0 0.4rem;
+  font-weight: 700;
+}
+
+.game-desc {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Hover and active states for game cards */
+.game-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* When a card is active (centered on mobile) apply the same enlargement as hover */
+.game-card.active {
+  transform: scale(1.05);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* On desktop: grid layout and overlay appears on hover */
+@media (min-width: 769px) {
+  .game-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 2rem 5%;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+  .game-card {
+    flex: initial;
+    margin: 0;
+    border-radius: 16px;
+    height: 0;
+    padding-bottom: 150%; /* maintain aspect ratio */
+  }
+  .game-card img,
+  .game-card .overlay {
+    position: absolute;
+    left: 0;
+    width: 100%;
+  }
+  .game-card img {
+    top: 0;
+    height: 100%;
+  }
+  /* On desktop, keep the overlay visible at the bottom at all times. */
+  .overlay {
+    bottom: 0;
+    transform: translateY(0);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.0));
+  }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

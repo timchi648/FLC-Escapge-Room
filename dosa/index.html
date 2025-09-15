@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- 디바이스 기준으로, 내부 고정 캔버스는 CSS로 축소 렌더링 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>도사의 마지막 주문서 찾기</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="stage" aria-hidden="true"></div>
+    <div id="app-wrap">
+      <div id="app" aria-label="게임 화면 캔버스" role="application">
+        <div id="background" aria-hidden="true"></div>
+        <!-- Ambient color overlay (조명 색온도에 따라 배경 분위기 색) -->
+        <div id="ambient-overlay" aria-hidden="true"></div>
+
+        <!-- Gauge container -->
+        <div id="gauge-container" aria-hidden="true">
+          <img id="gauge-bg" src="assets/images/gauge_bg.png" alt="게이지 배경" />
+          <div class="gauge-segment north"></div>
+          <div class="gauge-segment south"></div>
+          <div class="gauge-segment east"></div>
+          <div class="gauge-segment west"></div>
+          <div class="gauge-segment center"></div>
+        </div>
+
+        <!-- Character portrait & dialogue box -->
+        <div id="dialogue-box" class="hidden" role="button" aria-live="polite">
+          <img id="character-portrait" src="" alt="캐릭터 초상" />
+          <div id="dialogue-text"></div>
+        </div>
+
+        <!-- Choice container -->
+        <div id="choice-container" aria-label="선택지"></div>
+
+        <!-- Modal container for various overlays -->
+        <div id="modal-container" class="hidden" aria-modal="true" role="dialog"></div>
+
+        <!-- Toast notification -->
+        <div id="toast" aria-live="polite"></div>
+
+        <!-- Background music -->
+        <!-- <audio id="bgm" src="./assets/audio/bgm.mp3" loop></audio> -->
+      </div>
+    </div>
+
+    <script src="./script.js" defer></script>
+  </body>
+</html>

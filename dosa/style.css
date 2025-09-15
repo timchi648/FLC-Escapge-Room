@@ -1,0 +1,579 @@
+/* ================================
+   Viewport & Stage
+   - 큰 화면: 정중앙 배치
+   - 작은 화면: 비율 축소 (고정 캔버스 보전)
+   ================================ */
+
+:root{
+  --app-w: 1024px;
+  --app-h: 1536px;
+
+  /* iOS 홈 인디케이터/노치 안전영역 */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+
+  /* 가용 폭/높이: 안전영역을 제외한 실제 화면 */
+  --avail-w: calc(100vw - var(--safe-left) - var(--safe-right));
+  --avail-h: calc(var(--vvh, 100svh) - var(--safe-top) - var(--safe-bottom));
+  --scale: min(calc(var(--avail-w) / var(--app-w)), calc(var(--avail-h) / var(--app-h)));
+}
+
+/* ✅ 래퍼: 안전영역만큼 패딩을 주고 화면 ‘진짜 중앙’에 캔버스 배치 */
+#app-wrap{
+  position: fixed;
+  inset: 0;
+  padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+  display: grid;
+  place-items: center; /* 중앙 */
+  pointer-events: auto; /* 입력은 안 받고 */
+  background: #000;     /* 여백은 검정 */
+}
+
+/* body의 grid 중앙정렬/기타 transform은 제거 (중복 중앙정렬 방지) */
+html, body {
+  margin: 0; padding: 0; height: 100%; width: 100%;
+  background: #000; /* 레터박스 */
+  overflow: hidden;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* 스테이지: 안전한 뷰포트 박스 (iOS 주소창 등 고려) */
+#stage{
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100svh;
+  pointer-events: none;
+} 
+
+#app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1024px;   /* 고정 캔버스 */
+  height: 1536px;  /* 고정 캔버스 */
+  transform: none;           /* ❗ JS가 설정할 겁니다 */
+  transform-origin: 0 0;     /* 좌상단 기준으로만 이동+스케일 */
+  will-change: transform;    /* 부드럽게 */
+}
+
+/* 루트 글자 크기 크게(모바일 축소 가독성 대비) */
+html {
+  font-size: clamp(34px, 42px - 0.5vw, 34px);
+}
+
+/* ================================
+   Background
+   ================================ */
+#background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* 기존의 100% 100% 또는 cover 설정을 'contain'으로 교체 */
+#background .bg-layer {
+  position: absolute;
+  inset: 0;
+  background-size: contain;          /* ✅ 비율 유지 + 전체 표시 */
+  background-position: center center;/* ✅ 중앙 정렬 */
+  background-repeat: no-repeat;      /* ✅ 반복 금지 */
+  background-color: #000;            /* ✅ 내부 레터박스 검정 */
+
+  opacity: 0;
+  transition: opacity .6s ease;
+  will-change: opacity;
+}
+
+/* 보이는 쪽 */
+#background .bg-layer.active {
+  opacity: 1;
+}
+
+/* 페이드아웃용 */
+#background.is-fade-out { opacity: 0; }
+
+/* (선택) 페이드인 강조용 - 기본값이 1이라 없어도 됨 */
+#background.is-fade-in  { opacity: 1; }
+
+/* Ambient overlay: 조명 색온도에 따라 배경 분위기색 */
+#ambient-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0; /* 초기엔 꺼져 있게 시작. 조명 모달 조작 시 켜짐 */
+  transition: opacity 0.35s ease, background-color 0.18s ease, backdrop-filter 0.18s ease;
+  mix-blend-mode: overlay;
+  backdrop-filter: saturate(1.15);
+}
+
+/* ================================
+   Gauge
+   ================================ */
+#gauge-container {
+  position: absolute;
+  top: 2%;
+  right: 3%;
+  width: 80px;
+  height: 80px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+
+#gauge-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.gauge-segment {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 2;
+}
+
+/* North (top half) */
+.gauge-segment.north {
+  background-color: rgba(0, 0, 0, 0.6);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 0% 50%);
+}
+
+/* South (bottom half) */
+.gauge-segment.south {
+  background-color: rgba(255, 0, 0, 0.6);
+  clip-path: polygon(0% 50%, 100% 50%, 100% 100%, 0% 100%);
+}
+
+/* East (right half) */
+.gauge-segment.east {
+  background-color: rgba(0, 120, 255, 0.6);
+  clip-path: polygon(50% 0%, 100% 0%, 100% 100%, 50% 100%);
+}
+
+/* West (left half) */
+.gauge-segment.west {
+  background-color: rgba(255, 255, 255, 0.7);
+  clip-path: polygon(0% 0%, 50% 0%, 50% 100%, 0% 100%);
+}
+
+/* Center (filled when completed) */
+.gauge-segment.center {
+  width: 60%;
+  height: 60%;
+  left: 20%;
+  top: 20%;
+  background-color: rgba(255, 230, 0, 0.85);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.gauge-segment.active { 
+  opacity: 1;
+}
+
+/* ================================
+   Dialogue
+   ================================ */
+#dialogue-box {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 1rem; /* 40px */
+  display: flex;
+  align-items: flex-end;
+  gap: 0.6rem;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  min-height: 7.5rem; /* 300px */
+}
+
+#dialogue-box.hidden { display: none; }
+
+#character-portrait {
+  width: 128px;
+  max-width: none;
+  height: auto;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+#dialogue-text {
+  flex: 1;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  white-space: pre-line;
+  word-break: keep-all;
+}
+
+/* ================================
+   Choice Buttons
+   ================================ */
+#choice-container {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 90%;
+}
+
+#choice-container button {
+  background: linear-gradient(135deg, #78aaff, #4c6ef5);
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 0.8rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#choice-container button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+/* 침입자 선택 버튼 정렬/간격 */
+.choice-col {
+    display: flex;
+    justify-content: center;      /* 가로 가운데 정렬 */
+    align-items: center;          /* 세로 가운데 정렬 */
+    gap: clamp(8px, 2.5vw, 16px); /* 버튼 사이 간격 (반응형) */
+    flex-wrap: wrap;              /* 줄바꿈 허용 (모바일) */
+    margin-top: 16px;
+}
+
+/* 버튼 터치 영역 넉넉하게 */
+.choice-col .btn-primary {
+    padding: 12px 18px;
+    min-height: 44px;             /* 접근성 권장 터치 높이 */
+    min-width: 120px;
+    border-radius: 12px;
+}
+
+/* 모바일에서 버튼이 너무 붙지 않도록 한 줄에 하나씩도 보기 좋게 */
+@media (max-width: 480px) {
+    .choice-col .btn-primary {
+        width: 100%;
+        max-width: 280px;         /* 너무 길어지지 않게 제한 */
+    }
+}
+
+/* flex-gap 미지원 브라우저용 안전망 */
+.no-flex-gap .choice-col .btn-primary { margin: 6px; }
+
+/* ================================
+   Modal
+   ================================ */
+/* ===== Modal sanity override (최우선) ===== */
+#modal-container {
+  position: absolute;
+  inset: 0;
+  display: grid !important;       /* 중앙정렬 강제 */
+  place-items: center !important;  /* 중앙정렬 강제 */
+  padding-block: clamp(12px, 3vh, 36px);
+  padding-inline: clamp(12px, 3vw, 36px);
+
+  /* 어둡힘을 컨테이너 자체에서 주면 확실함 */
+  background: rgba(0,0,0,0.45); /* 배경 흐림이 사라졌다면 이 줄이 필요 */
+
+  box-sizing: border-box;
+  pointer-events: auto;
+  z-index: 80 !important;          /* 대화상자/게이지/토스트 위로 */
+}
+
+/* flex 덮어쓰기 규칙 무력화 */
+#modal-container:not(.hidden) { display: grid !important; }
+
+/* 숨김은 확실히 none 처리 */
+#modal-container.hidden { display: none !important; }
+
+/* 중복 어둡힘 방지: ::before는 끔 */
+#modal-container::before { content: none !important; }
+
+/* 모달 박스만 클릭 활성 (배경 클릭은 통과) */
+#modal-container .modal-content {
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+  isolation: isolate;
+padding: clamp(16px, 2.0vh, 28px) clamp(18px, 2.2vw, 36px);
+
+  background: rgba(20,20,20,0.92);
+  color: #fff;
+  border-radius: 16px;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.45),
+    0 0 0 1px rgba(255,255,255,0.06) inset;
+  box-sizing: border-box;
+  backdrop-filter: blur(3px)}
+
+
+/* 색온도에 따라 모달 자체를 틴팅(조명 제어 모달 전용) */
+.modal-content.tintable-light {
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(var(--modal-tint-rgb, 255,176,64), var(--modal-tint-alpha-top, 0.12)),
+      rgba(var(--modal-tint-rgb, 255,176,64), var(--modal-tint-alpha-bottom, 0.06))
+    ),
+    rgba(20,20,20,0.92);                      /* ← 기본 배경 위에 그라디언트 */
+  border: 1px solid rgba(var(--modal-tint-rgb, 255,176,64), var(--modal-stroke-alpha, 0.16));
+}
+
+.modal-content h3 {
+  margin: 0 0 0.6rem 0;
+  font-size: 1.1rem;         /* 44px */
+}
+
+.modal-content p, .modal-content li, .modal-content td, .modal-content th {
+  font-size: 0.85rem;        /* 34px */
+  line-height: 1.5;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 버튼 프리셋 */
+.btn-primary,
+.btn-secondary,
+.btn-danger,
+.btn-success {
+  display: inline-block;
+  border: none;
+  border-radius: 16px;
+  padding: 0.8rem 1.2rem;     /* 32px 48px */
+  font-size: 0.85rem;         /* 34px */
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.35);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.2s ease;
+}
+
+.btn-primary  { background: #4c6ef5; color: #fff; }
+.btn-secondary{ background: #444;    color: #fff; }
+.btn-danger   { background: #d9534f; color: #fff; }
+.btn-success  { background: #4caf50; color: #fff; }
+
+.btn-primary:active,
+.btn-secondary:active,
+.btn-danger:active,
+.btn-success:active {
+  transform: translateY(2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.35);
+}
+
+/* 카드형 타일 */
+.tile {
+  background:#222; padding:0.8rem; border-radius:0.5rem; text-align:center;
+}
+
+/* 표 */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table thead tr { background:#333; }
+.table th, .table td { padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
+
+/* 로그 리스트 */
+.log-list { margin-top: 0.5rem; line-height: 1.45; padding-left: 1rem; }
+.log-list li { margin: 0.2rem 0; }
+
+/* 입력 */
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.6rem;               /* 24px */
+  font-size: 1rem;               /* 40px */
+  margin-top: 0.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: #333;
+  color: #fff;
+}
+
+/* ================================
+   월패드 색온도 슬라이더 스타일
+   ================================ */
+.wallpad-light-wrap {
+  position: relative;
+  width: 100%;
+  margin-top: 0.6rem;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #111;
+}
+.wallpad-light-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  pointer-events: none; /* 아래 슬라이더가 클릭받도록 */
+}
+
+/* 오른쪽 실제 슬라이더가 있는 구역에 맞춰 오버레이(비율 기반) */
+.vslider {
+  position: absolute;
+
+  top: 20%;
+  bottom: 30%;
+  right: 12%;
+  width: 38px;
+  cursor: grab;
+  touch-action: none;
+}
+.vslider:active { cursor: grabbing; }
+
+.vslider-track {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  bottom: 0;
+  width: 18px;
+  border-radius: 999px;
+  /* 5700K(흰빛) -> 3000K(노을빛) 느낌으로 그라데이션 */
+  background: linear-gradient(to bottom, #ffffff 0%, #fff6d7 35%, #ffd590 75%, #f5a623 100%);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.25);
+}
+
+.vslider-thumb {
+  position: absolute;
+  left: 50%;
+  top: 0%;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #fff;
+  /* 빨간 점선 링과 유사한 느낌의 외곽(디바이스별 차이 고려) */
+  box-shadow:
+    0 0 0 4px rgba(255, 255, 255, 0.95),
+    0 2px 4px rgba(0,0,0,0.25);
+}
+
+/* 읽기 영역 */
+.ct-readout-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+  justify-content: center;
+}
+.ct-swatch {
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 0.3rem;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.25);
+  background: #fff;
+}
+.ct-readout {
+  margin: 0;
+  text-align: center;
+}
+
+/* ================================
+   Toast
+   ================================ */
+#toast {
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
+  bottom: 160px;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;            /* 32px */
+  opacity: 0;
+  transition: opacity 0.28s ease;
+  z-index: 30;
+  pointer-events: none;
+}
+
+/* ================================
+   Hotspot 시각 디버깅 (필요 시)
+   ================================ */
+/* 월패드 아이콘용 오버레이 레이어 + 버튼 */
+.hotspot-layer { 
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.hotspot-btn {
+  position: absolute;
+  pointer-events: auto;
+  background: transparent;
+  z-index: 4;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+/* 디버그 보기(테두리 보여주기) — padWrapper에 .debug 붙이면 표시됨 */
+.debug .hotspot-btn { outline: 2px dashed rgba(0,255,255,.7); background: rgba(0,255,255,.08); }
+
+/* ================================
+   효과 (공용)
+   ================================ */
+.shake { animation: shake 0.3s infinite; }
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(-1deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+/* keyframes (플래시/블링크) */
+@keyframes flashRed { 0% { opacity: 0.2; } 50% { opacity: 0.6; } 100% { opacity: 0.2; } }
+@keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+/* 반응형 룰은 필요 없음 — 스케일로 해결 */
+
+/* 콘센트 모달 전용 이미지 스타일 */
+.outlet-img {
+  width: 100%;
+  display: block;
+  border-radius: 8px;
+  cursor: pointer;
+}

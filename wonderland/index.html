@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>원더랜드 입사 게임</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="game">
+    <!-- Dynamic background container -->
+    <div id="background"></div>
+    <!-- Alert overlay for emergency scenes -->
+    <div id="alert-overlay"></div>
+    <!-- Intruder overlay for step 13 (appears before emergency dialogue) -->
+    <div id="intruder-overlay"></div>
+    <!-- Dialogue and choices overlay -->
+    <div id="dialogue-box">
+      <div id="character-portrait"></div>
+      <div id="dialogue-text"></div>
+      <div id="choice-container"></div>
+    </div>
+    <!-- Background music -->
+    <!-- <audio id="bgm" src="assets/audio/bgm.wav" loop></audio> -->
+    <!-- Toast message container -->
+    <div id="toast"></div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>

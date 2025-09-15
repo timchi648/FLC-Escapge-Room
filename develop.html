@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>개발중입니다</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E%F0%9F%9A%A7%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg1: #0ea5e9; /* sky-500 */
+      --bg2: #8b5cf6; /* violet-500 */
+      --bg3: #f59e0b; /* amber-500 */
+      --card-bg: rgba(255, 255, 255, 0.72);
+      --text: #0f172a; /* slate-900 */
+      --muted: #475569; /* slate-600 */
+      --shadow: 0 10px 30px rgba(2, 6, 23, 0.18);
+      --radius: 22px;
+      --accent: #10b981; /* emerald-500 */
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --card-bg: rgba(2, 6, 23, 0.72);
+        --text: #e2e8f0; /* slate-200 */
+        --muted: #94a3b8; /* slate-400 */
+        --shadow: 0 10px 28px rgba(15, 23, 42, 0.6);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, "Apple SD Gothic Neo", "Malgun Gothic", "Helvetica Neue", Arial, "Segoe UI Emoji", "Segoe UI Symbol";
+      color: var(--text);
+      background: radial-gradient(1000px 600px at 10% 10%, color-mix(in oklab, var(--bg1) 60%, white), transparent 60%),
+                  radial-gradient(900px 550px at 90% 20%, color-mix(in oklab, var(--bg2) 55%, white), transparent 60%),
+                  radial-gradient(800px 500px at 50% 100%, color-mix(in oklab, var(--bg3) 60%, white), transparent 60%),
+                  linear-gradient(180deg, #f8fafc, #eef2ff);
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      overflow-x: hidden;
+    }
+
+    .shell {
+      width: min(960px, 92vw);
+      padding: clamp(20px, 2.5vw, 40px);
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(8px) saturate(120%);
+      -webkit-backdrop-filter: blur(8px) saturate(120%);
+      border: 1px solid rgba(255,255,255,0.35);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      overflow: clip;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: clamp(18px, 3vw, 36px);
+      align-items: center;
+    }
+    @media (max-width: 760px) {
+      .row { grid-template-columns: 1fr; }
+    }
+
+    .hero {
+      padding: clamp(22px, 3vw, 36px);
+    }
+    .kicker {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: clamp(12px, 1.8vw, 13px);
+      letter-spacing: .04em; text-transform: uppercase; font-weight: 700;
+      color: var(--muted);
+      background: linear-gradient(90deg, #d1fae5, #e0f2fe);
+      color: #065f46;
+      border-radius: 999px; padding: 6px 12px;
+      box-shadow: inset 0 0 0 1px rgba(5,150,105,.2);
+    }
+    h1 {
+      margin: 12px 0 8px;
+      font-size: clamp(26px, 4.6vw, 44px);
+      line-height: 1.12; letter-spacing: -0.02em;
+    }
+    .sub {
+      margin: 0 0 18px;
+      font-size: clamp(14px, 2.1vw, 16px);
+      color: var(--muted);
+    }
+
+    .cta {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    }
+    .btn {
+      appearance: none; border: 0; cursor: pointer; font-weight: 700;
+      border-radius: 14px; padding: 12px 18px; font-size: 15px;
+      box-shadow: 0 6px 16px rgba(16,185,129, .25);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--accent) 85%, white), var(--accent));
+      color: white;
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+    }
+    .btn:active { transform: translateY(1px) scale(.99); }
+    .btn:hover { filter: brightness(1.04); }
+    .btn.outline {
+      background: transparent; color: var(--text);
+      border: 1px solid color-mix(in oklab, var(--muted) 40%, transparent);
+      box-shadow: none;
+    }
+
+    .meta {
+      display: grid; gap: 6px; margin-top: 18px;
+      font-size: clamp(12px, 1.8vw, 13px);
+      color: var(--muted);
+    }
+
+    /* Progress bar */
+    .bar {
+      position: relative; height: 10px; border-radius: 999px; overflow: hidden;
+      background: color-mix(in oklab, var(--muted) 16%, transparent);
+      border: 1px solid rgba(148, 163, 184, .35);
+    }
+    .bar .in {
+      position: absolute; inset: 0 auto 0 0; width: 36%;
+      background: linear-gradient(90deg, #34d399, #22d3ee, #a78bfa);
+      background-size: 200% 100%;
+      animation: load 1.8s ease-in-out infinite;
+    }
+    @keyframes load {
+      0% { width: 10%; background-position: 0 0; }
+      50% { width: 72%; background-position: 100% 0; }
+      100% { width: 36%; background-position: 0 0; }
+    }
+
+    /* Illustration */
+    .stage {
+      display: grid; place-items: center; padding: clamp(18px, 3vw, 28px);
+      background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(255,255,255,.1));
+      border-top: 1px solid rgba(255,255,255,.5);
+    }
+    .art {
+      width: min(520px, 72vw);
+      aspect-ratio: 16/11; display: block;
+      filter: drop-shadow(0 10px 20px rgba(2, 6, 23, .18));
+    }
+
+    /* SVG animations */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    @keyframes pulse {
+      0%, 100% { opacity: .4; }
+      50% { opacity: 1; }
+    }
+
+    .gear { transform-origin: center; animation: spin 6s linear infinite; }
+    .gear.fast { animation-duration: 3.2s; }
+    .wrench { transform-origin: 70% 40%; animation: bob 2.8s ease-in-out infinite; }
+    .dot { animation: pulse 1.8s ease-in-out infinite; }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .gear, .wrench, .dot, .bar .in { animation: none !important; }
+    }
+
+    footer {
+      text-align: center; margin-top: 14px; font-size: 12px; color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main class="shell" aria-live="polite">
+    <section class="card">
+      <div class="row">
+        <div class="hero">
+          <span class="kicker" aria-hidden="true">🚧 Beta Work<br>in Progress</span>
+          <h1>😢<br>개발 중<br>입니다.</h1>
+          <p class="sub">더 나은 경험을 위해 페이지를 준비하고 있어요.</p>
+
+          <div class="bar" role="progressbar" aria-label="작업 진행중" aria-valuemin="0" aria-valuemax="100">
+            <div class="in"></div>
+          </div>
+
+          <!-- <div class="cta" style="margin-top: 16px;">
+            <button class="btn" onclick="location.reload()">새로고침</button>
+            <a class="btn outline" href="#" onclick="alert('연락처 또는 피드백 링크로 연결하세요!'); return false;">문의하기</a>
+          </div> -->
+
+          <div class="meta">
+            <div>9/12일 2차 공개 예정입니다.</div>
+          </div>
+        </div>
+
+        <div class="stage" aria-hidden="true">
+          <!-- Simple, friendly construction SVG -->
+          <svg class="art" viewBox="0 0 600 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- background panel -->
+            <rect x="40" y="40" width="520" height="300" rx="20" fill="url(#grad)" opacity="0.9"/>
+            <rect x="60" y="70" width="480" height="16" rx="8" fill="#94a3b8" opacity=".35"/>
+            <rect x="60" y="102" width="380" height="12" rx="6" fill="#94a3b8" opacity=".25"/>
+            <rect x="60" y="126" width="420" height="12" rx="6" fill="#94a3b8" opacity=".22"/>
+
+            <!-- cones -->
+            <g transform="translate(90,240)">
+              <path d="M0 80h70L35 0 0 80Z" fill="#f97316"/>
+              <rect x="-6" y="74" width="82" height="10" rx="5" fill="#111827" opacity=".08"/>
+              <rect x="12" y="36" width="46" height="12" fill="#fde68a"/>
+            </g>
+            <g transform="translate(170,240)">
+              <path d="M0 80h70L35 0 0 80Z" fill="#f97316"/>
+              <rect x="12" y="36" width="46" height="12" fill="#fde68a"/>
+            </g>
+
+            <!-- wrench -->
+            <g class="wrench" transform="translate(440,210)">
+              <path d="M0 0c20-20 50-23 67-6-8 8-21 13-33 12l10 10-42 42-18-18 42-42-10-10C19 21 14 8 22 0Z" fill="#0ea5e9" />
+              <rect x="-8" y="50" width="110" height="18" rx="9" fill="#0284c7"/>
+              <circle cx="96" cy="59" r="6" fill="#e2e8f0"/>
+            </g>
+
+            <!-- gears -->
+            <g transform="translate(300,250)">
+              <g class="gear">
+                <circle cx="0" cy="0" r="26" fill="#10b981"/>
+                <g fill="#059669">
+                  <rect x="-6" y="-40" width="12" height="16" rx="3"/>
+                  <rect x="-6" y="24" width="12" height="16" rx="3"/>
+                  <rect x="24" y="-6" width="16" height="12" rx="3"/>
+                  <rect x="-40" y="-6" width="16" height="12" rx="3"/>
+                  <rect x="18" y="18" width="12" height="12" transform="rotate(45 24 24)" rx="3"/>
+                  <rect x="-30" y="-30" width="12" height="12" transform="rotate(45 -24 -24)" rx="3"/>
+                  <rect x="18" y="-30" width="12" height="12" transform="rotate(45 24 -24)" rx="3"/>
+                  <rect x="-30" y="18" width="12" height="12" transform="rotate(45 -24 24)" rx="3"/>
+                </g>
+                <circle cx="0" cy="0" r="12" fill="#34d399"/>
+              </g>
+            </g>
+            <g transform="translate(360,290)">
+              <g class="gear fast">
+                <circle cx="0" cy="0" r="16" fill="#a78bfa"/>
+                <g fill="#7c3aed">
+                  <rect x="-4" y="-26" width="8" height="12" rx="2"/>
+                  <rect x="-4" y="14" width="8" height="12" rx="2"/>
+                  <rect x="14" y="-4" width="12" height="8" rx="2"/>
+                  <rect x="-26" y="-4" width="12" height="8" rx="2"/>
+                </g>
+                <circle cx="0" cy="0" r="8" fill="#c4b5fd"/>
+              </g>
+            </g>
+
+            <!-- floating dots -->
+            <circle class="dot" cx="520" cy="110" r="6" fill="#22d3ee"/>
+            <circle class="dot" cx="540" cy="138" r="4" fill="#34d399" style="animation-delay:.4s"/>
+            <circle class="dot" cx="500" cy="150" r="5" fill="#a78bfa" style="animation-delay:.8s"/>
+
+            <defs>
+              <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.86"/>
+                <stop offset="100%" stop-color="#f8fafc" stop-opacity="0.6"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+      </div>
+      <footer>© <span id="y"></span> HDC랩스 — 다같이팀치</footer>
+    </section>
+  </main>
+
+  <script>
+    // Set year & small helpers
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Optional: keyboard shortcut for high-contrast outline (toggle for QA)
+    document.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() === 'o' && (e.ctrlKey || e.metaKey)) {
+        document.documentElement.classList.toggle('outline');
+      }
+    });
+  </script>
+  <style>
+    /* QA helper toggled by Ctrl/Cmd + O */
+    .outline * { outline: 1px dashed rgba(2, 6, 23, .3); outline-offset: 2px; }
+  </style>
+</body>
+</html>

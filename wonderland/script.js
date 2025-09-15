@@ -164,7 +164,7 @@ const scenes = [
     id: 8,
     background: 'images/living_room.png',
     script: [
-      { speaker: '주인', name: '주인', expression: 'assets/images/owner_sleepy.png', text: '아.. 내가 금요일에 차를 A구역에 뒀던가? 씁.. 자리가 없길래 평소랑 다른데 뒀던 것 같은데..' }
+      { speaker: '주인', name: '주인', expression: 'assets/images/owner_sleepy.png', text: '아.. 내가 금요일에 차를 A구역에 뒀던가? 씁.. 자리가 없길래 평소랑 다른데 뒀던 것 같은데..\n\n\n힌트 : 주인의 차번호는 12가1234' }
     ],
     process: runStep8
   },
@@ -523,9 +523,15 @@ function runStep7() {
         state.currentScene = tempScene;
         state.lineIndex = 0;
         showNextLine();
+      } else if (opt.id === 'lightOff') {
+        // wrong
+        showToast('언덕 매니저: 야! 요리중인데 불을 끄면 어떡하냐?! 어두우면 손 다치잖아!');
+      } else if (opt.id === 'gas') {
+        // wrong
+        showToast('언덕 매니저: 야!!! 지금 요리 중인데 가스를 끄면 어떡하냐!! 넌 진짜.. 이럴거면 집에 가라!');
       } else {
         // wrong
-        showToast('언덕 매니저: 음… 아닌 것 같은데? 다시 해보자.');
+        showToast('언덕 매니저: 씁.. 그건 아니지 않냐?');
       }
     });
     choiceContainer.appendChild(btn);
@@ -552,7 +558,7 @@ function runStep8() {
         showCCTVGame();
       } else {
         // wrong
-        showToast('언덕 매니저: 지금 주차장을 찾아야지! 다시 선택해.');
+        showToast('언덕 매니저: 주차장 CCTV를 확인해야지!');
       }
     });
     choiceContainer.appendChild(btn);
@@ -741,7 +747,7 @@ function runStep11() {
         showNextLine();
       } else {
         // wrong
-        showToast('언덕 매니저: 쯧, 집중을 안하네, 안해.. 아까 주인이 주차장에서 차를 찾았잖냐! 쯧쯧..');
+        showToast('언덕 매니저: 쯧, 집중을 안하네, 안해.. 아까 주인이 주차장에서 차를 찾았잖냐! 그런데 버스를 타겠어?! 쯧쯧..');
       }
     });
     choiceContainer.appendChild(btn);

@@ -1177,6 +1177,59 @@ function openLighting() {
   });
 }
 
+// === [ADD] 콘센트(현무) 카운트다운을 모달 밖으로 이동 ===
+const northCountdown = {
+  t1: null, t2: null, t3: null, done: null, active: false
+};
+
+function cancelNorthCountdown() {
+  clearTimeout(northCountdown.t1);
+  clearTimeout(northCountdown.t2);
+  clearTimeout(northCountdown.t3);
+  clearTimeout(northCountdown.done);
+  northCountdown.t1 = northCountdown.t2 = northCountdown.t3 = northCountdown.done = null;
+  northCountdown.active = false;
+}
+
+function startNorthCountdown() {
+  // 이미 완료했으면 무시
+  if (state.missions.north) return;
+
+  // 중복 방지: 새로 시작하기 전에 정리
+  cancelNorthCountdown();
+  northCountdown.active = true;
+
+  // 즉시 안내
+  showToast('전원 off');
+
+  // 1,2,3초 경과 토스트
+  northCountdown.t1 = setTimeout(() => {
+    if (!state.elec && northCountdown.active) showToast('1초');
+  }, 1000);
+  northCountdown.t2 = setTimeout(() => {
+    if (!state.elec && northCountdown.active) showToast('2초');
+  }, 2000);
+  northCountdown.t3 = setTimeout(() => {
+    if (!state.elec && northCountdown.active) showToast('3초');
+  }, 3000);
+
+  // 3초 유지 후(안전 여유 조금) 최초 1회 미션 완료 연출
+  northCountdown.done = setTimeout(() => {
+    if (!state.elec && northCountdown.active && !state.missions.north) {
+      state.missions.north = true;
+      updateGauge();
+      showCreature('black_tortoise', () => showSystemTip('north'));
+      showToast('현무의 힘이 깨어났습니다!');
+      // 모달이 열려 있든 닫혀 있든 안전하게 숨김 시도
+      setTimeout(() => {
+        modalContainer.classList.add('hidden');
+        checkAllMissions();
+      }, 1200);
+    }
+    cancelNorthCountdown();
+  }, 3200);
+}
+
 // ===== 콘센트 =====
 function openOutlet() {
   const content = document.createElement('div');
@@ -1207,43 +1260,6 @@ function openOutlet() {
 
   const outletImg = content.querySelector('#outlet-img');
 
-  // OFF 유지 카운트다운 타이머 관리
-  let offTimers = [];
-  let offFlowActive = false;
-  function clearOffFlow() {
-    offTimers.forEach(t => clearTimeout(t));
-    offTimers = [];
-    offFlowActive = false;
-  }
-
-  function startOffFlow() {
-    clearOffFlow();
-    offFlowActive = true;
-
-    // 즉시 OFF 토스트
-    showToast('전원 off');
-
-    // 1, 2, 3초 경과 토스트
-    offTimers.push(setTimeout(() => { if (!state.elec && offFlowActive) showToast('1초'); }, 1000));
-    offTimers.push(setTimeout(() => { if (!state.elec && offFlowActive) showToast('2초'); }, 2000));
-    offTimers.push(setTimeout(() => { if (!state.elec && offFlowActive) showToast('3초'); }, 3000));
-
-    // 추가 1초 쉬고(총 4초) 최초 1회 연출
-    offTimers.push(setTimeout(() => {
-      if (!state.elec && offFlowActive && !state.missions.north) {
-        state.missions.north = true;
-        updateGauge();
-        showCreature('black_tortoise', () => showSystemTip('north'));
-        showToast('현무의 힘이 깨어났습니다!');
-        setTimeout(() => {
-          modalContainer.classList.add('hidden');
-          checkAllMissions();
-        }, 1200);
-      }
-      clearOffFlow();
-    }, 4000));
-  }
-
   outletImg.addEventListener('click', () => {
     const before = state.elec;
     state.elec = !state.elec;
@@ -1254,23 +1270,22 @@ function openOutlet() {
 
     if (state.elec) {
       // ON으로 전환 → 어떤 흐름이든 중단
-      clearOffFlow();
+      cancelNorthCountdown();
       showToast('전원 on');
     } else {
       // OFF로 전환
       // ⚠️ 이미 한 번 현무 미션을 달성했다면(= 최초가 아님) 카운트다운/연출 생략
       if (state.missions.north) {
-        clearOffFlow();        // 혹시 남아있을 타이머 정리
+        cancelNorthCountdown();
         showToast('전원 off'); // 간단 안내만
         return;
       }
       // 최초 OFF 전환일 때만 카운트다운 시작
-      startOffFlow();
+      startNorthCountdown();
     }
   });
 
   content.querySelector('#outlet-close').addEventListener('click', () => {
-    clearOffFlow();
     modalContainer.classList.add('hidden');
   });
 }

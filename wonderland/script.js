@@ -76,7 +76,7 @@ const scenes = [
     id: 1,
     background: 'assets/images/closet.png',
     script: [
-      { speaker: 'Narrator', text: '당신은 고된 취준 끝에, ‘윈더랜드’에 입사하게 된 신입 사원입니다.\n즐거운 첫 출근을 해보세요!' }
+      { speaker: 'Narrator', text: '당신은 고된 취준 끝에, ‘원더랜드’에 입사하게 된 신입 사원입니다.\n즐거운 첫 출근을 해보세요!' }
     ],
     choices: [
       { text: '출근하기', nextScene: 2, onSelect: () => {  } }
@@ -90,13 +90,13 @@ const scenes = [
       {
         speaker: '열덕 매니저',
         name: '열덕 매니저',
-        expression: 'images/manager_yeoldock.png',
+        expression: 'assets/images/manager_yeoldock.png',
         text: '어어, 원더 매니저. 잘오셨습니다. 오늘은 언덕 매니저님과 현장에 나가서 교육을 받으면 됩니다. 음.. 조금 까칠하시긴 한데.. 그래도 괜찮을거에요 ㅎㅎ'
       },
       {
         speaker: '언덕 매니저',
         name: '언덕 매니저',
-        expression: 'images/manager_undock.png',
+        expression: 'assets/images/manager_undock.png',
         text: '왔냐? …그래, 시간은 맞춰 왔네. 여기가 베스틴 원더랜드다. 오늘 하루 네 교육은 내가 맡았어. 실수하면? 그냥 나가라. 시간 아까우니까 바로 현장으로 간다.'
       }
     ],
@@ -111,7 +111,7 @@ const scenes = [
       {
         speaker: '언덕 매니저',
         name: '언덕 매니저',
-        expression: 'images/manager_undock.png',
+        expression: 'assets/images/manager_undock.png',
         text: '왔냐? …그래, 시간은 맞춰 왔네. 여기가 원더랜드다. 오늘 하루 네 교육은 내가 맡았어. 실수하면? 그냥 나가라. 시간 아까우니까 바로 현장으로 간다.'
       }
     ],
@@ -127,7 +127,7 @@ const scenes = [
   },
   {
     id: 4,
-    background: 'images/living_room.png',
+    background: 'assets/images/living_room.png',
     script: [
       { speaker: 'Narrator', text: '짹짹- 아침 새소리와 함께 평화로운 거실의 모습이 보인다.' }
     ],
@@ -135,20 +135,20 @@ const scenes = [
   },
   {
     id: 5,
-    background: 'images/living_room.png',
+    background: 'assets/images/living_room.png',
     script: [
       // 주인이 기지개를 피는 모습 (stretching); this file actually shows the owner stretching
-      { speaker: '주인', name: '주인', expression: 'assets/images/owner_happy.png', text: '하암~ 원더, 왔어? 오늘도 출근 준비 잘부탁해~' },
-      { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'images/manager_undock.png', text: '아침이 엉망이면 하루 종일 기분 잡치는 거 알지?\n주인이 뭘 먼저 하는지 잘보고 빠릿빠릿 움직이라고.' }
+      { speaker: '주인', name: '주인', expression: 'assets/images/owner_sleepy.png', text: '하암~ 원더, 왔어? 오늘도 출근 준비 잘부탁해~' },
+      { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_undock.png', text: '아침이 엉망이면 하루 종일 기분 잡치는 거 알지?\n주인이 뭘 먼저 하는지 잘보고 빠릿빠릿 움직이라고.' }
     ],
     nextScene: 6
   },
   {
     id: 6,
-    background: 'images/living_room.png',
+    background: 'assets/images/living_room.png',
     script: [
       // 주인이 하품하며 졸린 모습 (yawning)
-      { speaker: '주인', name: '주인', expression: 'assets/images/owner_happy.png', text: '으.. 졸려. 잠이 안깨네..' }
+      { speaker: '주인', name: '주인', expression: 'assets/images/owner_sleepy.png', text: '으.. 졸려. 잠이 안깨네..' }
     ],
     process: runStep6
   },
@@ -162,15 +162,15 @@ const scenes = [
   },
   {
     id: 8,
-    background: 'images/living_room.png',
+    background: 'assets/images/living_room.png',
     script: [
-      { speaker: '주인', name: '주인', expression: 'assets/images/owner_sleepy.png', text: '아.. 내가 금요일에 차를 A구역에 뒀던가? 씁.. 자리가 없길래 평소랑 다른데 뒀던 것 같은데..\n\n\n힌트 : 주인의 차번호는 12가1234' }
+      { speaker: '주인', name: '주인', expression: 'assets/images/owner_thinking.png', text: '아.. 내가 금요일에 차를 A구역에 뒀던가? 씁.. 자리가 없길래 평소랑 다른데 뒀던 것 같은데..\n\n\n힌트 : 주인의 차는 파란색, 차 번호는 12가 1234' }
     ],
     process: runStep8
   },
   {
     id: 9,
-    background: 'images/living_room.png',
+    background: 'assets/images/living_room.png',
     script: [
       { speaker: 'Narrator', text: '주인은 출근 준비 중이다. 이제 뭘 할까?' }
     ],
@@ -178,7 +178,7 @@ const scenes = [
   },
   {
     id: 10,
-    background: 'images/living_room.png',
+    background: 'assets/images/living_room.png',
     script: [
       { speaker: 'Narrator', text: '주인은 출근 준비 중이다. 이제 뭘 할까?' }
     ],
@@ -186,7 +186,7 @@ const scenes = [
   },
   {
     id: 11,
-    background: 'images/living_room.png',
+    background: 'assets/images/living_room.png',
     script: [
       { speaker: 'Narrator', text: '주인이 신발을 신는다.' }
     ],
@@ -194,21 +194,21 @@ const scenes = [
   },
   {
     id: 12,
-    background: 'images/living_room.png',
+    background: 'assets/images/shoe_room.png',
     script: [
-      { speaker: '주인', name: '주인', expression: 'assets/images/owner_sleepy.png', text: '오늘도 집 잘부탁해 원더~' }
+      { speaker: '주인', name: '주인', expression: 'assets/images/owner_goodbye.png', text: '오늘도 집 잘부탁해 원더~' }
     ],
     process: runStep12
   },
   {
     id: 13,
-    background: 'images/living_room.png',
+    background: 'assets/images/living_room.png',
     // Custom process handles intruder overlay, red alert, and emergency dialogues
     process: runStep13
   },
   {
     id: 14,
-    background: 'images/living_room.png',
+    background: 'assets/images/living_room.png',
     script: [
       { speaker: 'Narrator', text: '곧 경비원과 경찰, 주인에 의해 도둑이 붙잡혔다.' }
     ],
@@ -216,37 +216,40 @@ const scenes = [
   },
   {
     id: 15,
-    background: 'images/living_room.png',
+    background: 'assets/images/living_room.png',
     script: [
-      { speaker: '주인', name: '주인', expression: 'assets/images/owner_sleepy.png', text: '아이고.. 이게 뭔일이래. 금방 잡혀서 다행이다. 책이나 읽어야지..' },
-      { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_happy.png', text: '야! 멍때리지마. 주인 책읽는단다! 빨리 너도 할일을 해야지!' }
+      { speaker: '주인', name: '주인', expression: 'assets/images/owner_read_book.png', text: '아이고.. 이게 뭔일이래. 금방 잡혀서 다행이다. 책이나 읽어야지..' },
+      { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_undock.png', text: '야! 멍때리지마. 주인 책읽는단다! 빨리 너도 할일을 해야지!' }
     ],
     process: runStep15
   },
   {
     id: 16,
-    background: 'images/living_room.png',
+    background: 'assets/images/living_room.png',
     script: [
       { speaker: 'Narrator', text: '삐빅! 월패드에서 알림이 도착했다. “현재 실내 공기질이 좋지 않습니다. 환기를 동작시킬까요?”' },
-      { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_happy.png', text: '야! 얼른 알겠다고 해. 주인이 알아서 하게 하지말고. 넌 주인의 편의를 최대한 봐줘야한다.' }
+      { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_undock.png', text: '야! 얼른 알겠다고 해. 주인이 알아서 하게 하지말고. 넌 주인의 편의를 최대한 봐줘야한다.' }
     ],
     process: runStep16
   },
   {
     id: 17,
-    background: 'images/living_room.png',
+    background: 'assets/images/living_room.png',
     script: [
-      { speaker: '주인', name: '주인', expression: 'assets/images/owner_happy.png', text: '하암~…..' },
+      { speaker: '주인', name: '주인', expression: 'assets/images/owner_sleepy.png', text: '하암~…..' },
       { speaker: 'Narrator', text: '주인이 책을 읽다 잠들었다.' }
     ],
     process: runStep17
   },
   {
     id: 18,
-    background: 'images/living_room.png',
+    background: 'assets/images/living_room.png',
     script: [
       { speaker: 'Narrator', text: '당신은 원더랜드의 신입 직원으로서 기본 자격을 갖추었습니다.\n하지만 언덕의 인정은 절반뿐입니다.' },
-      { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_happy.png', text: '오늘은 테스트니까 봐줬다. 진짜 상황이면 벌써 잘렸을 거다. 다음엔 나한테 덜 욕 먹게 해라. 가라. ..내일보자.' },
+      { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_undock_smile.png', text: '오늘은 테스트니까 봐줬다. 그래도.. 나쁘지 않았다. ..내일보자.' },
+      { speaker: 'Narrator', text: '당신은 지금까지 베스틴 스마트홈의 AI인 원더가 되어보았습니다.' },
+      { speaker: 'Narrator', text: '원더는 주인의 편의성을 보장해주는 스마트홈 AI 입니다.' },
+      { speaker: 'Narrator', text: '베스틴 스마트홈을 통해 실제 원더를 만나보세요!' },
     ],
     // no nextScene, end of game
   }
@@ -473,7 +476,7 @@ function runStep6() {
         // reset choices
         choiceContainer.innerHTML = '';
         // show reward dialogues
-        const thankLine = { speaker: '주인', name: '주인', expression: 'assets/images/owner_sleepy.png', text: '고마워! 빛을 보니까 잠이 좀 깬다.' };
+        const thankLine = { speaker: '주인', name: '주인', expression: 'assets/images/owner_happy.png', text: '고마워! 빛을 보니까 잠이 좀 깬다.' };
         let reactionText = '';
         if (state.step6Attempts === 0) {
           reactionText = '뭐, 나쁘지 않네.';
@@ -482,7 +485,7 @@ function runStep6() {
         } else {
           reactionText = '야.. 이걸 이렇게 틀리냐? 쯧쯧.. 넌 짐 쌀 준비해라.';
         }
-        const reactionLine = { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_happy.png', text: reactionText };
+        const reactionLine = { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_undock.png', text: reactionText };
         // create temporary scene lines then proceed to next scene 7
         const tempScene = { script: [ thankLine, reactionLine ], nextScene: 7 };
         // replace current scene temporarily
@@ -518,8 +521,9 @@ function runStep7() {
         // correct
         choiceContainer.innerHTML = '';
         // show praise
-        const praise = { speaker: '주인', name: '주인', expression: 'assets/images/owner_sleepy.png', text: '역시 원더야~~ 말안해도 척척이네 ㅎㅎ 고마워 ㅎㅎ' };
-        const tempScene = { script: [ praise ], nextScene: 8 };
+        const praise = { speaker: '주인', name: '주인', expression: 'assets/images/owner_happy.png', text: '역시 원더야~~ 말안해도 척척이네 ㅎㅎ 고마워 ㅎㅎ' };
+        const praise_undock = {speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_undock_smile.png', text: '흠.. 주인이 아침 먹을 때 커피를 마시는 걸 알아채다니, 생각보다 제법이군.'}
+        const tempScene = { script: [ praise, praise_undock ], nextScene: 8 };
         state.currentScene = tempScene;
         state.lineIndex = 0;
         showNextLine();
@@ -638,8 +642,7 @@ function showCCTVGame() {
         state.lineIndex = 0;
         showNextLine();
       } else {
-        // wrong
-        showToast('언덕 매니저: 그쪽은 아닌 것 같아. 다른 구역을 확인해봐.');
+        showToast('언덕 매니저: 주인의 차는 파란색, 12가 1234야. CCTV 화면을 잘 봐.');
       }
     });
     zoneBtnWrap.appendChild(btn);
@@ -665,7 +668,7 @@ function runStep9() {
         showBriefing(opt.id, 10);
       } else {
         // wrong
-        showToast('언덕 매니저: 아직 할 일이 남았잖아. 다시 생각해.');
+        showToast('언덕 매니저: 아직 할 일이 남았어.');
       }
     });
     choiceContainer.appendChild(btn);
@@ -677,11 +680,11 @@ function showBriefing(type, nextSceneId) {
   choiceContainer.innerHTML = '';
   let lines = [];
   if (type === 'weather') {
-    lines.push({ speaker: '윈더', name: '윈더', text: '오늘 최저 기온은 25도, 최고 기온은 33도입니다. 오후에 비소식이 있으니, 우산 챙겨가세요.' });
-    lines.push({ speaker: '주인', name: '주인', expression: 'assets/images/owner_sleepy.png', text: '맞다 우산!!' });
+    lines.push({ speaker: '원더', name: '원더', text: '오늘 최저 기온은 25도, 최고 기온은 33도입니다. 오후에 비소식이 있으니, 우산 챙겨가세요.' });
+    lines.push({ speaker: '주인', name: '주인', expression: 'assets/images/owner_surprise.png', text: '맞다 우산!!' });
   } else if (type === 'news') {
-    lines.push({ speaker: '윈더', name: '윈더', text: '오늘의 주요 뉴스는 …' });
-    lines.push({ speaker: '주인', name: '주인', expression: 'assets/images/owner_sleepy.png', text: '…후.. 출근하면서 주식 좀 봐야겠다..' });
+    lines.push({ speaker: '원더', name: '원더', text: '오늘의 주요 뉴스는 …' });
+    lines.push({ speaker: '주인', name: '주인', expression: 'assets/images/owner_breath.png', text: '뭐라고?? …후.. 출근하면서 주식 좀 봐야겠다..' });
   }
   const tempScene = { script: lines, nextScene: nextSceneId };
   state.currentScene = tempScene;
@@ -739,8 +742,8 @@ function runStep11() {
       if (opt.id === 'elevator') {
         // correct
         choiceContainer.innerHTML = '';
-        const wonderLine = { speaker: '윈더', name: '윈더', text: '엘리베이터가 현재 7층에 도착했습니다.' };
-        const ownerLine = { speaker: '주인', name: '주인', expression: 'assets/images/owner_sleepy.png', text: '땡큐~' };
+        const wonderLine = { speaker: '원더', name: '원더', text: '엘리베이터가 현재 7층에 도착했습니다.' };
+        const ownerLine = { speaker: '주인', name: '주인', expression: 'assets/images/owner_happy.png', text: '땡큐~' };
         const tempScene = { script: [ wonderLine, ownerLine ], nextScene: 12 };
         state.currentScene = tempScene;
         state.lineIndex = 0;
@@ -819,7 +822,7 @@ function runStep15() {
       if (opt.id === 'softWhite') {
         // correct
         choiceContainer.innerHTML = '';
-        const reaction = { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_stern.png', text: '그래, 눈 안아프겠네. 어휴, 오늘 처음으로 사람 같은 판단했네.' };
+        const reaction = { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_undock.png', text: '그래, 눈 안아프겠네. 어휴, 오늘 처음으로 사람 같은 판단했네.' };
         const tempScene = { script: [ reaction ], nextScene: 16 };
         state.currentScene = tempScene;
         state.lineIndex = 0;
@@ -897,7 +900,7 @@ function runStep13() {
     startAlertEffect();
     const lines = [
       { speaker: '원더', name: '원더', text: '어, 이럴땐 어떡하죠, 언덕 매니저님?!!!' },
-      { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_happy.png', text: '쯧쯧.. 침착하게 기다려라. 아까 방범모드를 켜놨으니, 경비실과 주인에게 이미 연락이 갔을 거야. 곧 경비원이 확인해보러 올거다. 우리는 이 상황을 잘 기억해놨다가 알려주기만 하면 돼.' }
+      { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_undock.png', text: '쯧쯧.. 침착하게 기다려라. 아까 방범모드를 켜놨으니, 경비실과 주인에게 이미 연락이 갔을 거야. 곧 경비원이 확인해보러 올거다. 우리는 이 상황을 잘 기억해놨다가 알려주기만 하면 돼.' }
     ];
     const tempScene = { script: lines, nextScene: 14 };
     state.currentScene = tempScene;
@@ -930,7 +933,7 @@ function runStep13() {
     // Set up emergency dialogues as a temporary scene
     const lines = [
       { speaker: '원더', name: '원더', text: '어, 이럴땐 어떡하죠, 언덕 매니저님?!!!' },
-      { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_happy.png', text: '쯧쯧.. 침착하게 기다려라. 아까 방범모드를 켜놨으니, 경비실과 주인에게 이미 연락이 갔을 거야. 곧 경비원이 확인해보러 올거다. 우리는 이 상황을 잘 기억해놨다가 알려주기만 하면 돼.' }
+      { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_undock.png', text: '쯧쯧.. 침착하게 기다려라. 아까 방범모드를 켜놨으니, 경비실과 주인에게 이미 연락이 갔을 거야. 곧 경비원이 확인해보러 올거다. 우리는 이 상황을 잘 기억해놨다가 알려주기만 하면 돼.' }
     ];
     const tempScene = { script: lines, nextScene: 14 };
     state.currentScene = tempScene;

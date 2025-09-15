@@ -66,7 +66,7 @@ function showToast(msg) {
 }
 
 
-init();
+// init();
 function init() {
   [
     'assets/images/cctv/A.png',

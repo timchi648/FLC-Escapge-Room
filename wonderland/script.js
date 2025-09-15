@@ -65,6 +65,33 @@ function showToast(msg) {
   }, 2000);
 }
 
+
+init();
+function init() {
+  [
+    'assets/images/cctv/A.png',
+    'assets/images/cctv/B.png',
+    'assets/images/cctv/C.png',
+    'assets/images/cctv/D.png',
+    'assets/images/closet.png',
+    'assets/images/kitchen.png',
+    'assets/images/living_room.png',
+    'assets/images/manager_undock_smile.png',
+    'assets/images/manager_undock.png',
+    'assets/images/manager_yeoldock.png',
+    'assets/images/office.png',
+    'assets/images/owner_breath.png',
+    'assets/images/owner_happy.png',
+    'assets/images/owner_read_book.png',
+    'assets/images/owner_sleepy.png',
+    'assets/images/owner_surprise.png',
+    'assets/images/owner_thinking.png',
+    'assets/images/shoe_room.png',
+    
+
+  ].forEach(preloadImage);
+}
+
 // Functions to control alert effects for emergency scene
 function startAlertEffect() {
   if (alertOverlay) {

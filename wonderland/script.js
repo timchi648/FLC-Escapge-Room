@@ -300,7 +300,7 @@ const scenes = [
       { speaker: 'Narrator', text: '원더는 주인의 편의성을 보장해주는 스마트홈 AI 입니다.' },
       { speaker: 'Narrator', text: '베스틴 스마트홈을 통해 실제 원더를 만나보세요!' },
     ],
-    // no nextScene, end of game
+    process: showEndingButton
   }
 ];
 
@@ -504,6 +504,27 @@ dialogueBox.addEventListener('click', (e) => {
   state.waitingClick = false;
   showNextLine();
 });
+
+function goToEnd() {
+  window.location.href = '../end.html';
+}
+
+function showEndingButton() {
+  // 마지막 안내 버튼
+  choiceContainer.innerHTML = '';
+  const btn = document.createElement('button');
+  btn.className = 'gohome';
+  btn.textContent = '홈으로 돌아가기';
+  btn.addEventListener('click', () => goToEnd());
+  choiceContainer.appendChild(btn);
+
+  // 버튼이 바로 보이도록 스크롤 하단 정렬
+  setTimeout(() => {
+    const box = document.getElementById('dialogue-box');
+    box.scrollTop = box.scrollHeight;
+  }, 0);
+}
+
 
 // ------------------- Step-specific logic ----------------------
 

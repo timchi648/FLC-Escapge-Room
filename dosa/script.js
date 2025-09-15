@@ -494,6 +494,7 @@ function typeText(text, callback) {
   step();
 }
 
+const END_URL = '../end.html';
 // ===== 다음 대사/로직 =====
 function showNextLine() {
   const scene = scenes.find(s => s.id === state.currentScene);
@@ -532,6 +533,11 @@ function showNextLine() {
     if (scene.nextScene) {
       showScene(scene.nextScene);
       return;
+    }
+
+    if (scene.id === 7 && state.lineIndex >= (scene.script?.length || 0)) {
+      // 살짝 여유를 두고 전환 (연출 끊김 방지)
+      setTimeout(() => { window.location.assign(END_URL); }, 300);
     }
   }
 }
@@ -848,9 +854,11 @@ function openNote() {
   modalContainer.classList.remove('hidden');
   modalContainer.addEventListener('click', (e) => {
     if (!e.target.closest('.modal-content')) modalContainer.classList.add('hidden');
+    if (!e.target.closest('.modal-content')) state.isNoteOpen = false;
   });
   document.getElementById('close-note').addEventListener('click', () => {
     modalContainer.classList.add('hidden');
+    state.isNoteOpen = false;
   });
 }
 

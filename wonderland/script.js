@@ -90,13 +90,13 @@ const scenes = [
       {
         speaker: '열덕 매니저',
         name: '열덕 매니저',
-        expression: 'assets/images/manager_yeoldock.png',
+        expression: 'images/manager_yeoldock.png',
         text: '어어, 원더 매니저. 잘오셨습니다. 오늘은 언덕 매니저님과 현장에 나가서 교육을 받으면 됩니다. 음.. 조금 까칠하시긴 한데.. 그래도 괜찮을거에요 ㅎㅎ'
       },
       {
         speaker: '언덕 매니저',
         name: '언덕 매니저',
-        expression: 'assets/images/manager_undock.png',
+        expression: 'images/manager_undock.png',
         text: '왔냐? …그래, 시간은 맞춰 왔네. 여기가 원더랜드다. 오늘 하루 네 교육은 내가 맡았어. 실수하면? 그냥 퇴근하지 말고 나가라. 시간 아까우니까 바로 현장으로 간다.'
       }
     ],
@@ -111,7 +111,7 @@ const scenes = [
       {
         speaker: '언덕 매니저',
         name: '언덕 매니저',
-        expression: 'assets/images/manager_undock.png',
+        expression: 'images/manager_undock.png',
         text: '왔냐? …그래, 시간은 맞춰 왔네. 여기가 원더랜드다. 오늘 하루 네 교육은 내가 맡았어. 실수하면? 그냥 퇴근하지 말고 나가라. 시간 아까우니까 바로 현장으로 간다.'
       }
     ],
@@ -127,7 +127,7 @@ const scenes = [
   },
   {
     id: 4,
-    background: 'assets/images/living_room.png',
+    background: 'images/living_room.png',
     script: [
       { speaker: 'Narrator', text: '짹짹- 아침 새소리와 함께 평화로운 거실의 모습이 보인다.' }
     ],
@@ -135,17 +135,17 @@ const scenes = [
   },
   {
     id: 5,
-    background: 'assets/images/living_room.png',
+    background: 'images/living_room.png',
     script: [
       // 주인이 기지개를 피는 모습 (stretching); this file actually shows the owner stretching
       { speaker: '주인', name: '주인', expression: 'assets/images/owner_happy.png', text: '하암~ 원더, 왔어? 오늘도 출근 준비 잘부탁해~' },
-      { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_undock.png', text: '아침이 엉망이면 하루 종일 기분 잡치는 거 알지?\n주인이 뭘 먼저 하는지 잘보고 빠릿빠릿 움직이라고.' }
+      { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'images/manager_undock.png', text: '아침이 엉망이면 하루 종일 기분 잡치는 거 알지?\n주인이 뭘 먼저 하는지 잘보고 빠릿빠릿 움직이라고.' }
     ],
     nextScene: 6
   },
   {
     id: 6,
-    background: 'assets/images/living_room.png',
+    background: 'images/living_room.png',
     script: [
       // 주인이 하품하며 졸린 모습 (yawning)
       { speaker: '주인', name: '주인', expression: 'assets/images/owner_happy.png', text: '으.. 졸려. 잠이 안깨네..' }
@@ -162,7 +162,7 @@ const scenes = [
   },
   {
     id: 8,
-    background: 'assets/images/living_room.png',
+    background: 'images/living_room.png',
     script: [
       { speaker: '주인', name: '주인', expression: 'assets/images/owner_sleepy.png', text: '아.. 내가 금요일에 차를 A구역에 뒀던가? 씁.. 자리가 없길래 평소랑 다른데 뒀던 것 같은데..' }
     ],
@@ -170,7 +170,7 @@ const scenes = [
   },
   {
     id: 9,
-    background: 'assets/images/living_room.png',
+    background: 'images/living_room.png',
     script: [
       { speaker: 'Narrator', text: '주인은 출근 준비 중이다. 이제 뭘 할까?' }
     ],
@@ -178,7 +178,7 @@ const scenes = [
   },
   {
     id: 10,
-    background: 'assets/images/living_room.png',
+    background: 'images/living_room.png',
     script: [
       { speaker: 'Narrator', text: '주인은 출근 준비 중이다. 이제 뭘 할까?' }
     ],
@@ -186,7 +186,7 @@ const scenes = [
   },
   {
     id: 11,
-    background: 'assets/images/living_room.png',
+    background: 'images/living_room.png',
     script: [
       { speaker: 'Narrator', text: '주인이 신발을 신는다.' }
     ],
@@ -194,7 +194,7 @@ const scenes = [
   },
   {
     id: 12,
-    background: 'assets/images/living_room.png',
+    background: 'images/living_room.png',
     script: [
       { speaker: '주인', name: '주인', expression: 'assets/images/owner_sleepy.png', text: '오늘도 집 잘부탁해 원더~' }
     ],
@@ -202,13 +202,13 @@ const scenes = [
   },
   {
     id: 13,
-    background: 'assets/images/living_room.png',
+    background: 'images/living_room.png',
     // Custom process handles intruder overlay, red alert, and emergency dialogues
     process: runStep13
   },
   {
     id: 14,
-    background: 'assets/images/living_room.png',
+    background: 'images/living_room.png',
     script: [
       { speaker: 'Narrator', text: '곧 경비원과 경찰, 주인에 의해 도둑이 붙잡혔다.' }
     ],
@@ -216,7 +216,7 @@ const scenes = [
   },
   {
     id: 15,
-    background: 'assets/images/living_room.png',
+    background: 'images/living_room.png',
     script: [
       { speaker: '주인', name: '주인', expression: 'assets/images/owner_sleepy.png', text: '아이고.. 이게 뭔일이래. 금방 잡혀서 다행이다. 반차써버렸네. 책이나 읽어야지..' },
       { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_happy.png', text: '야! 멍때리지마. 주인 책읽는단다! 빨리 너도 할일을 해야지!' }
@@ -225,7 +225,7 @@ const scenes = [
   },
   {
     id: 16,
-    background: 'assets/images/living_room.png',
+    background: 'images/living_room.png',
     script: [
       { speaker: 'Narrator', text: '삐빅! 월패드에서 알림이 도착했다. “현재 실내 공기질이 좋지 않습니다. 환기를 동작시킬까요?”' },
       { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_happy.png', text: '야! 얼른 알겠다고 해. 주인이 알아서 하게 하지말고. 넌 주인의 편의를 최대한 봐줘야한다.' }
@@ -234,7 +234,7 @@ const scenes = [
   },
   {
     id: 17,
-    background: 'assets/images/living_room.png',
+    background: 'images/living_room.png',
     script: [
       { speaker: '주인', name: '주인', expression: 'assets/images/owner_happy.png', text: '하암~…..' },
       { speaker: 'Narrator', text: '주인이 책을 읽다 잠들었다.' }
@@ -243,7 +243,7 @@ const scenes = [
   },
   {
     id: 18,
-    background: 'assets/images/living_room.png',
+    background: 'images/living_room.png',
     script: [
       { speaker: 'Narrator', text: '당신은 원더랜드의 신입 직원으로서 기본 자격을 갖추었습니다.\n하지만 언덕의 인정은 절반뿐입니다.' },
       { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_happy.png', text: '오늘은 테스트니까 봐줬다. 진짜 상황이면 벌써 잘렸을 거다. 다음엔 나한테 덜 욕 먹게 해라. 가라. ..내일보자.' },

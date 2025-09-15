@@ -29,6 +29,28 @@ const bgm = document.getElementById('bgm');
 const alertOverlay = document.getElementById('alert-overlay');
 const toastEl = document.getElementById('toast');
 
+// 대사+선택지를 스크롤 전용 래퍼로 한 번 감싸기
+const dialogueScroll = document.createElement('div');
+dialogueScroll.id = 'dialogue-scroll';
+dialogueScroll.style.display = 'flex';
+dialogueScroll.style.flexDirection = 'column';
+dialogueScroll.style.gap = '8px';
+dialogueScroll.style.flex = '1';
+dialogueScroll.style.minHeight = '0';
+
+// portrait 오른쪽에 오도록, text/choices를 래퍼로 이동
+dialogueBox.insertBefore(dialogueScroll, dialogueText);
+dialogueScroll.appendChild(dialogueText);
+dialogueScroll.appendChild(choiceContainer);
+
+// 아래로 스크롤 도우미
+function scrollDialogueToBottom() {
+  // 레이아웃 반영 후 스크롤
+  requestAnimationFrame(() => {
+    dialogueScroll.scrollTop = dialogueScroll.scrollHeight;
+  });
+}
+
 // Toast notification handling
 let toastTimeout = null;
 function showToast(msg) {
@@ -316,6 +338,7 @@ function typeText(text, element, callback) {
     if (idx < text.length) {
       element.textContent += text.charAt(idx);
       idx++;
+      dialogueScroll.scrollTop = dialogueScroll.scrollHeight;
       setTimeout(step, 20);
     } else {
       // typing finished normally
@@ -365,6 +388,7 @@ function showNextLine() {
           // If there are choices, show them immediately; otherwise require user tap to proceed
           if (sc.choices) {
             showChoices(sc.choices);
+            setTimeout(scrollDialogueToBottom, 0);
           } else {
             // no auto progression; wait for user click, then next showNextLine will handle process/nextScene
             state.waitingClick = true;

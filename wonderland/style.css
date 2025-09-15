@@ -11,13 +11,18 @@ html, body {
 }
 
 /* Game container fills the viewport */
+/* 기존 #game의 height: 100vh; 를 교체 */
 #game {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh; /* 주소창 변화에도 안정적 */
   overflow: hidden;
   background: #000;
 }
+@supports not (height: 100dvh) {
+  #game { height: 100vh; } /* 구형 브라우저 폴백 */
+}
+
 
 /* Background images are rendered with a fade-in effect */
 #background {
@@ -34,24 +39,59 @@ html, body {
 }
 
 /* Dialogue box anchored at the bottom of the screen */
+/* 바닥 고정 높이, 외부 스크롤 금지 */
+/* 기존 #dialogue-box 규칙에서 position/anchor/스크롤만 아래로 교체 */
+/* 하단 고정 + 반투명 배경 + 가로(랩 허용) 레이아웃 */
 #dialogue-box {
-  position: absolute;
+  position: fixed;                         /* 화면 하단에 고정 */
   left: 0;
   right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  bottom: env(safe-area-inset-bottom, 0);  /* iOS 홈 인디케이터 회피 */
+  z-index: 3;
+
+  background: rgba(0, 0, 0, 0.6);          /* 반투명 검은 배경 복구 */
   padding: 10px;
   box-sizing: border-box;
-  z-index: 3;
-  min-height: 25%;
-  display: flex;
+
+  display: flex;                           /* 가로 배치 */
   flex-direction: row;
+  flex-wrap: wrap;                         /* 줄바꿈 허용(선택지는 아래로) */
   align-items: flex-start;
   justify-content: flex-start;
-  column-gap: 10px;
-  /* hide initially */
+  gap: 10px;
+
+  /* 높이와 스크롤: 박스 자체만 세로 스크롤 */
+  min-height: 25svh;                       /* 기존 느낌 유지 */
+  max-height: clamp(32svh, 45svh, 56svh);  /* 작은 화면에서도 안정 */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  /* 기존 페이드 인/아웃 동작 유지 */
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.25s ease;
+
+  pointer-events: auto;                    /* 클릭 가능 */
+  transform: translateZ(0);                /* 튐 방지(합성 레이어) */
+}
+
+
+/* 내부 스크롤 컨테이너 */
+#dialogue-scroll {
+  flex: 1;
+  min-height: 0;           /* flex 컨테이너에서 스크롤 동작 보장 */
+  max-height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 작은 화면에서 높이 조금 더 확보 */
+@media (max-height: 720px) {
+  #dialogue-box { height: 50vh; }
+  .choice, .confirm { padding: 8px 12px; font-size: 0.95rem; }
+  #choice-container { gap: 6px; }
 }
 
 /* Character portrait container */
@@ -74,7 +114,8 @@ html, body {
 
 /* Dialogue text area */
 #dialogue-text {
-  flex-grow: 1;
+  order: 2;
+  flex: 1 1 0;
   padding: 5px;
   font-size: 1rem;
   line-height: 1.4;
@@ -161,10 +202,12 @@ html, body {
 
 /* Choice container below text */
 #choice-container {
-  margin-top: 10px;
+  order: 3;
+  flex: 1 0 100%;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-top: 10px;
 }
 
 /* Individual choice buttons */

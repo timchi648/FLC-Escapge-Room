@@ -9,12 +9,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const scrollDownBtn = document.getElementById('scroll-down');
 
   // Smooth scroll from hero to games section
+  // 기존 scrollIntoView 핸들러만 이걸로 교체
   if (scrollDownBtn) {
     scrollDownBtn.addEventListener('click', () => {
-      const target = document.getElementById('games-section');
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
-      }
+      const se = document.scrollingElement || document.documentElement;
+      const go = (behavior = 'smooth') =>
+        se.scrollTo({ top: se.scrollHeight, behavior });
+
+      go('smooth');           // 1차: 부드럽게 맨 아래
+      setTimeout(() => go('auto'), 300); // 2차: 주소창 접힘 후 보정
     });
   }
 

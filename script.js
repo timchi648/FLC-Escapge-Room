@@ -6,30 +6,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const cards = document.querySelectorAll('.game-card');
   const leftArrow = document.querySelector('.nav-arrow.left');
   const rightArrow = document.querySelector('.nav-arrow.right');
-  const scrollDownBtn = document.getElementById('scroll-down');
 
-  // Smooth scroll from hero to games section
-  // 기존 scrollIntoView 핸들러만 이걸로 교체
-  if (scrollDownBtn) {
-    scrollDownBtn.addEventListener('click', () => {
-      const bottom = Math.max(
-        document.body.scrollHeight,
-        document.documentElement.scrollHeight
-      ) - window.innerHeight;
+  const btn = document.getElementById('scroll-down');
+  const end = document.getElementById('page-end');
+  if (!btn || !end) return;
 
-      // 1차: 부드럽게 문서 하단으로
-      window.scrollTo({ top: bottom, behavior: 'smooth' });
-
-      // 2차: 주소창 접힘/펼침 등으로 높이가 달라졌으면 한 번 더 보정
-      setTimeout(() => {
-        const newBottom = Math.max(
-          document.body.scrollHeight,
-          document.documentElement.scrollHeight
-        ) - window.innerHeight;
-        window.scrollTo({ top: newBottom, behavior: 'auto' });
-      }, 300);
-    });
-  }
+  btn.addEventListener('click', (e) => {
+    e.preventDefault(); // 앵커의 즉시 점프 방지
+    end.scrollIntoView({ block: 'end', behavior: 'smooth' }); // 1차: 부드럽게
+    setTimeout(() => {
+      end.scrollIntoView({ block: 'end', behavior: 'auto' }); // 2차: 주소창 접힘 등 높이변화 보정
+    }, 350);
+  }, { passive: true });
 
 
   // IntersectionObserver: highlight active card on small screens

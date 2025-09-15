@@ -67,6 +67,11 @@ html, body {
   opacity: 0.85;
 }
 
+a.scroll-down-btn {
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
 .hero-title {
   margin: 0.5rem 0 1.5rem;
   font-size: 4rem;

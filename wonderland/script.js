@@ -97,7 +97,7 @@ const scenes = [
         speaker: '언덕 매니저',
         name: '언덕 매니저',
         expression: 'images/manager_undock.png',
-        text: '왔냐? …그래, 시간은 맞춰 왔네. 여기가 원더랜드다. 오늘 하루 네 교육은 내가 맡았어. 실수하면? 그냥 퇴근하지 말고 나가라. 시간 아까우니까 바로 현장으로 간다.'
+        text: '왔냐? …그래, 시간은 맞춰 왔네. 여기가 베스틴 원더랜드다. 오늘 하루 네 교육은 내가 맡았어. 실수하면? 그냥 나가라. 시간 아까우니까 바로 현장으로 간다.'
       }
     ],
     // 모든 대사를 본 후 자동으로 다음 장면으로 이동한다.
@@ -112,7 +112,7 @@ const scenes = [
         speaker: '언덕 매니저',
         name: '언덕 매니저',
         expression: 'images/manager_undock.png',
-        text: '왔냐? …그래, 시간은 맞춰 왔네. 여기가 원더랜드다. 오늘 하루 네 교육은 내가 맡았어. 실수하면? 그냥 퇴근하지 말고 나가라. 시간 아까우니까 바로 현장으로 간다.'
+        text: '왔냐? …그래, 시간은 맞춰 왔네. 여기가 원더랜드다. 오늘 하루 네 교육은 내가 맡았어. 실수하면? 그냥 나가라. 시간 아까우니까 바로 현장으로 간다.'
       }
     ],
     choices: [
@@ -218,7 +218,7 @@ const scenes = [
     id: 15,
     background: 'images/living_room.png',
     script: [
-      { speaker: '주인', name: '주인', expression: 'assets/images/owner_sleepy.png', text: '아이고.. 이게 뭔일이래. 금방 잡혀서 다행이다. 반차써버렸네. 책이나 읽어야지..' },
+      { speaker: '주인', name: '주인', expression: 'assets/images/owner_sleepy.png', text: '아이고.. 이게 뭔일이래. 금방 잡혀서 다행이다. 책이나 읽어야지..' },
       { speaker: '언덕 매니저', name: '언덕 매니저', expression: 'assets/images/manager_happy.png', text: '야! 멍때리지마. 주인 책읽는단다! 빨리 너도 할일을 해야지!' }
     ],
     process: runStep15

@@ -10,6 +10,7 @@ const state = {
   currentScene: null,
   lineIndex: 0,
   waitingClick: false,
+  isNoteOpen: false,
   typing: false,
   currentTyping: null,
   skipRequested: false,
@@ -555,14 +556,17 @@ function shouldShowHintTap(e) {
 // 현재 미션 상황에 맞는 힌트 문구 선택
 function getContextHint() {
     // 우선순위: 남쪽(주작) → 서쪽(백호) → 북쪽(현무) → 동쪽(청룡) → 센터
+    if (!state.isNoteOpen) {
+      return '액자의 문구를 살펴보자.';
+    }
     if (!state.missions.south) {
-        return '액자의 문구를 살펴보자. 방을 노을빛으로 만드려면 어떻게 해야할까?';
+        return '방을 노을빛으로 만드려면 어떻게 해야할까?';
     }
     if (!state.missions.north) {
         return '모든 전원을 끄고 3초간 유지해 보자. 콘센트는 월패드에서 제어할 수 있어.';
     }
     if (!state.missions.west) {
-        return '액자의 문구를 살펴보자. 출차시간을 확인해서 호랑이 자동차의 잠금을 풀어야할까?';
+        return '출차시간을 확인해서 호랑이 자동차의 잠금을 풀어야할까?';
     }
     if (!state.missions.east) {
         return '환기를 켜서 공기를 맑게 만들어 보자. 월패드의 환기에서 켤 수 있어.';
@@ -614,9 +618,10 @@ const scenes = [
         expression: 'assets/images/sage_face.png',
         text: '제자여.. 스마트홈에 숨어있는 4개의 생활 주문을 풀어 사방신을 깨워야한다. 그래야 이 재앙을 멈출 수 있다.'
       },
+      { speaker: 'Narrator',
+        text: '나는 도사의 제자.\n도사님의 의지를 이어받아 스마트홈의 문제를 해결해야 한다.' },
       {
-        speaker: '도사',
-        expression: 'assets/images/sage_face.png',
+        speaker: 'Narrator',
         text: '베스틴 스마트홈에 가보자.'
       }
     ],
@@ -627,7 +632,12 @@ const scenes = [
     // background는 무시되고 동적 배경으로 대체됨
     background: 'assets/images/living_room.png',
     script: [
-      { speaker: 'Narrator', text: '거실에는 월패드와 흰 호랑이 장난감 자동차, 액자가 보인다. 무엇을 먼저 살펴볼까?' }
+      {
+        speaker: 'Narrator',
+        text: '베스틴 스마트홈에 도착했다. 이제 사방신을 깨워 스마트홈을 수호하게 만들어야 한다.'
+      }
+      ,{ speaker: 'Narrator',
+        text: '거실에는 월패드와 흰 호랑이 장난감 자동차, 액자가 보인다. 무엇을 먼저 살펴볼까?' }
     ],
     process: runLivingRoom
   },
@@ -636,7 +646,7 @@ const scenes = [
     // 이후 씬들도 모두 동적 배경 사용
     background: 'assets/images/peaceful_city.png',
     script: [
-      { speaker: 'Narrator', text: '모든 생활 주문이 풀리자, 사방신의 힘이 하나로 모여 나무 원이 빛난다.' }
+      { speaker: 'Narrator', text: '모든 생활 주문이 풀리자, 사방신의 힘이 하나로 모였다.' }
     ],
     process: runGaugeComplete
   },
@@ -651,8 +661,11 @@ const scenes = [
     background: 'assets/images/peaceful_city.png',
     script: [
       { speaker: '도사', expression: 'assets/images/sage_face.png', text: '제자여. 스마트홈의 사방신을 모두 깨웠구나.' },
+      { speaker: '도사', expression: 'assets/images/sage_face.png', text: '사실 스마트홈 시스템을 멈춘 건 나였다.' },
+      { speaker: '도사', expression: 'assets/images/sage_face.png', text: '너의 능력을 테스트하기 위함이었지.' },
       { speaker: '도사', expression: 'assets/images/sage_face.png', text: '베스틴 스마트홈의 관리자는 스마트홈의 기능을 이해하고, 지혜가 있어야한다.' },
-      { speaker: '도사', expression: 'assets/images/sage_face.png', text: '너는 베스틴 스마트홈 관리자가 될 자격이 있구나.' },
+      { speaker: '도사', expression: 'assets/images/sage_face.png', text: '너는 조명·전력·보안·환기를 정확히 다뤘구나.' },
+      { speaker: '도사', expression: 'assets/images/sage_face.png', text: '지금부터 베스틴 스마트홈 관리자의 자격을 맡기노라.' },
       { speaker: '도사', expression: 'assets/images/sage_face.png', text: '난 이제 편히 눈을 감을 수 있겠구나. 축하한다.' }
     ],
     nextScene: 7
@@ -661,8 +674,8 @@ const scenes = [
     id: 7,
     background: 'assets/images/peaceful_city.png',
     script: [
-      { speaker: 'Narrator', text: '평화로운 도시의 모습이 보인다.' },
-      { speaker: 'Narrator', text: '스마트홈 시스템은 정상화되었고, 난 HDC LABS의 베스틴 스마트홈 관리자가 되었다.' }
+      { speaker: 'Narrator', text: '시스템 복구 완료.' },
+      { speaker: 'Narrator', text: '난 베스틴 스마트홈 관리자가 되었다.' }
     ],
     nextScene: null
   }
@@ -747,6 +760,7 @@ function runLivingRoom() {
 
 // ===== 쪽지 =====
 function openNote() {
+  state.isNoteOpen = true;
   const content = document.createElement('div');
   content.className = 'modal-content';
   content.style.setProperty('--modal-max', '840px');

@@ -12,14 +12,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // 기존 scrollIntoView 핸들러만 이걸로 교체
   if (scrollDownBtn) {
     scrollDownBtn.addEventListener('click', () => {
-      const se = document.scrollingElement || document.documentElement;
-      const go = (behavior = 'smooth') =>
-        se.scrollTo({ top: se.scrollHeight, behavior });
+      const bottom = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight
+      ) - window.innerHeight;
 
-      go('smooth');           // 1차: 부드럽게 맨 아래
-      setTimeout(() => go('auto'), 300); // 2차: 주소창 접힘 후 보정
+      // 1차: 부드럽게 문서 하단으로
+      window.scrollTo({ top: bottom, behavior: 'smooth' });
+
+      // 2차: 주소창 접힘/펼침 등으로 높이가 달라졌으면 한 번 더 보정
+      setTimeout(() => {
+        const newBottom = Math.max(
+          document.body.scrollHeight,
+          document.documentElement.scrollHeight
+        ) - window.innerHeight;
+        window.scrollTo({ top: newBottom, behavior: 'auto' });
+      }, 300);
     });
   }
+
 
   // IntersectionObserver: highlight active card on small screens
   const initObserver = () => {

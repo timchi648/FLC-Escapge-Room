@@ -23,6 +23,7 @@ html, body {
   background: linear-gradient(to bottom, var(--bg-light), var(--bg-dark));
   color: var(--text-dark);
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 /* Hero section */
